@@ -78,9 +78,9 @@ export const siteConfig = {
 
   // ==================== Gitalk 评论配置 ====================
   gitalkConfig: {
-    clientID: "Ov23likzwzy8EZNhhhot",     // 你的 Client ID
-    clientSecret: "c7724261e5092063c0080b577daa68cc24ae96ef", // 你的 Client Secret
-    repo: "lamumumuuu/ZiisBlogs",
+    clientID: "Ov23likzwzy8EZNhhhot",
+    clientSecret: "c7724261e5092063c0080b577daa68cc24ae96ef",
+    repo: "ZiisBlogs",
     owner: "lamumumuuu",
     admin: ["lamumumuuu"],
   },
