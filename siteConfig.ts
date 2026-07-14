@@ -1,7 +1,7 @@
 // siteConfig.ts
 export const siteConfig = {
   // ==================== 基础信息 ====================
-  title: "领域展开のZiis",
+  title: "Ziis",
   description: "这是我用 Next.js 搭建的个人小站，施工中...",
   author: "Ziis",
   authorName: "Ziis",
@@ -13,13 +13,19 @@ export const siteConfig = {
   navAfter: "领域",
 
   // ==================== 导航菜单 ====================
-  navItems: [
-    { name: "首页", href: "/" },
-    { name: "音乐", href: "/music" },
-    { name: "灵境", href: "/lingjing" },
-    { name: "友链", href: "/friends" },
-    { name: "关于", href: "/about" },
-  ],
+// siteConfig.ts
+navItems: [
+  { name: '首页', href: '/' },
+  { name: '项目', href: '/projects' },
+  { name: '归档', href: '/timeline' },
+  { name: '照片墙', href: '/photowall' },
+  { name: '音乐', href: '/music' },
+  { name: '灵境', href: '/tree' },
+  { name: '说说', href: '/moments' },
+  { name: '杂谈', href: '/chatter' },
+  { name: '友链', href: '/friends' },
+  { name: '关于', href: '/about' },
+],
 
   // ==================== 社交链接 ====================
   social: {

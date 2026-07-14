@@ -15,20 +15,21 @@ import rehypeStringify from 'rehype-stringify';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'katex/dist/katex.min.css';
 
-import AboutClient from '../../components/AboutClient';  // ✅ 去掉 .tsx
+import AboutClient from '../../components/AboutClient';
 import { siteConfig } from '../../siteConfig';
 import { Suspense } from 'react';
 
 export default async function AboutPage() {
   const fullPath = path.join(process.cwd(), 'app', 'about', 'about.md');
   let contentHtml = '<p>博主很懒，还没有写自我介绍哦...</p>';
-  let coverImage = siteConfig.aboutCoverImage || 'https://bu.dusays.com/2026/03/24/69c23dc278c78.jpg';
+  let coverImage = siteConfig.aboutCoverImage || '/aboutbackground.jpg';
 
   try {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
-const parsed = matter(fileContents);
-const { data } = parsed;
-let content = parsed.content;    if (data.cover) coverImage = data.cover;
+    const parsed = matter(fileContents);
+    const { data } = parsed;
+    let content = parsed.content;
+    if (data.cover) coverImage = data.cover;
 
     // 文本预清洗
     content = content.replace(/^```\s*$/gm, '```cpp');
@@ -66,13 +67,16 @@ let content = parsed.content;    if (data.cover) coverImage = data.cover;
   return (
     <div className="min-h-screen relative pb-20">
       <Suspense fallback={<div className="h-96 flex items-center justify-center text-slate-500 font-bold animate-pulse">正在载入档案...</div>}>
-        <AboutClient
-          contentHtml={contentHtml}
-          coverImage={coverImage}
-          author={siteConfig.author}
-          avatarUrl={siteConfig.avatarUrl}
-          social={siteConfig.social}
-        />
+        {/* ✅ 页面级尺寸：宽度、最大宽度、边距、顶部间距 */}
+        <main className="w-[95%] md:w-[90%] max-w-4xl mx-auto mt-24 md:mt-28 relative z-10">
+          <AboutClient
+            contentHtml={contentHtml}
+            coverImage={coverImage}
+            author={siteConfig.author}
+            avatarUrl={siteConfig.avatarUrl}
+            social={siteConfig.social}
+          />
+        </main>
       </Suspense>
     </div>
   );
