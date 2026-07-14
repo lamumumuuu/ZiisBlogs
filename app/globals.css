@@ -1,4 +1,8 @@
+/* app/globals.css */
 @import "tailwindcss";
+
+/* 添加 Typography 插件 */
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: #ffffff;

@@ -28,44 +28,13 @@ export const siteConfig = {
     qq: "2563808918",
   },
 
-  // ==================== 关于页面 ====================
-  about: {
-    greeting: "👋 你好，欢迎来到我的小世界！",
-    intro: "我是 **Ziis**，一个在代码和数字之间穿梭的臭咸鱼。近期正埋头于 **Web 项目的基础学习**，喜欢折腾各种有趣的技术，偶尔也会写写博客记录自己的成长。",
-    sections: [
-      {
-        title: "💻 技术栈",
-        icon: "💻",
-        items: [
-          { label: "前端", desc: "Next.js, Html, CSS" },
-          { label: "后端", desc: "Node.js, Cpp" },
-          { label: "工具", desc: "VSCode, Git, Trae" },
-        ],
-      },
-      {
-        title: "🎮 兴趣与日常",
-        icon: "🎮",
-        items: [
-          { label: "游戏", desc: "喜欢 **开放世界** 和 **RPG** 游戏" },
-          { label: "动漫", desc: "日常追番，喜欢 **日常** 和 **治愈** 类型" },
-          { label: "学习", desc: "正在努力提升 **全栈开发** 能力" },
-        ],
-      },
-      {
-        title: "📫 联系方式",
-        icon: "📫",
-        items: [
-          { label: "GitHub", desc: "[lamumumuuu](https://github.com/lamumumuuu)" },
-          { label: "邮箱", desc: "2563808918@qq.com" },
-          { label: "QQ", desc: "2563808918" },
-        ],
-      },
-    ],
-    closing: '"路漫漫其修远兮，吾将上下而求索。" —— 让我们一起在代码的世界里成长吧！',
-  },
 
+  // ==================== 关于页面配置 ====================
+  aboutCoverImage: "https://bu.dusays.com/2026/03/24/69c23dc278c78.jpg", // 关于页面封面图
+
+  
   // ==================== 外观配置 ====================
-  useGradient: true,
+  useGradient: false,
   themeColors: ["#a18cd1", "#fbc2eb", "#a1c4fd", "#c2e9fb"],
   bgImages: [
     "https://bu.dusays.com/2026/03/24/69c1e38b4c370.jpg",
