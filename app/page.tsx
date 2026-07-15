@@ -1,30 +1,86 @@
-// app/page.tsx
-import { siteConfig } from "../siteConfig";
-import Image from "next/image";
+// =====================================================================
+// 文件位置注释
+// =====================================================================
+// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
+// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\app\page.tsx
+// 文件类型：Next.js App Router 服务器组件（首页）
+// 功能描述：首页页面组件，整合 HeroBanner（搜索栏替代品）、
+//          ProfileCard（个人资料卡片）、CloudPlayer（音乐播放器）、
+//          LyricBar（歌词显示栏）等组件。
+// =====================================================================
 
+import HeroBanner from '../components/HeroBanner';
+import ProfileCard from '../components/ProfileCard';
+import CloudPlayer from '../components/CloudPlayer';
+import LyricBar from '../components/LyricBar';
+
+// =====================================================================
+// Home 组件 - 首页
+// =====================================================================
+// 功能说明：
+//   1. 顶部 HeroBanner：长条形横幅，展示每日一言，替代搜索栏位置
+//   2. 第一行双栏布局：
+//      - 左侧：ProfileCard 个人资料卡片（点击跳转到关于页）
+//      - 右侧：CloudPlayer 音乐播放器卡片（点击跳转到音乐页）
+//   3. 第二行：LyricBar 歌词显示栏，横跨整行
+//
+// 布局说明：
+//   - 整体最大宽度 max-w-6xl，水平居中
+//   - 顶部间距 mt-24 sm:mt-28（避开固定导航栏）
+//   - 响应式设计：移动端单列，桌面端 12 列网格
+//   - 个人卡片占 7 列，音乐卡片占 5 列（lg 断点以上）
+//
+// 设计思路：
+//   - 参考 2.0 首页布局，但做了适应性调整
+//   - 使用 Next.js App Router 的服务器组件模式
+//   - 交互组件（ProfileCard、CloudPlayer 等）都是客户端组件
+// =====================================================================
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      {/* 头像 */}
-      {siteConfig.avatarUrl && (
-        <Image
-          src={siteConfig.avatarUrl}
-          alt={siteConfig.author}
-          width={96}
-          height={96}
-          className="h-24 w-24 rounded-full object-cover"
-        />
-      )}
-      
-      {/* 标题 */}
-      <h1 className="mt-4 text-3xl font-bold">
-        {siteConfig.title}
-      </h1>
-      
-      {/* 描述 */}
-      <p className="mt-2 text-gray-600">
-        {siteConfig.description}
-      </p>
+    <div className="w-full max-w-6xl mx-auto mt-24 sm:mt-28 px-4 sm:px-6 lg:px-10 relative z-10">
+
+      {/* ================================================================= */}
+      {/* 顶部：HeroBanner（搜索栏替代品）                                    */}
+      {/* 长条形横幅，展示每日一言，视觉上与搜索栏尺寸一致                    */}
+      {/* ================================================================= */}
+      <HeroBanner />
+
+      {/* ================================================================= */}
+      {/* 主内容区                                                           */}
+      {/* ================================================================= */}
+      <main className="flex flex-col gap-6 w-full mt-6">
+
+        {/* --------------------------------------------------------------- */}
+        {/* 第一行：个人资料卡片 + 音乐播放器（双栏布局）                     */}
+        {/* - 移动端：单列堆叠                                               */}
+        {/* - 桌面端：12 列网格，左 7 右 5                                    */}
+        {/* --------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+
+          {/* 个人资料卡片 - 左侧，占 7 列 */}
+          <div className="col-span-1 lg:col-span-7 flex flex-col">
+            <ProfileCard
+              postCount={0}
+              projectCount={0}
+              photoCount={0}
+            />
+          </div>
+
+          {/* 音乐播放器卡片 - 右侧，占 5 列 */}
+          <div className="col-span-1 lg:col-span-5 flex flex-col">
+            <CloudPlayer />
+          </div>
+        </div>
+
+        {/* --------------------------------------------------------------- */}
+        {/* 歌词显示栏 - 横跨整行                                             */}
+        {/* 位于个人卡片和音乐卡片下方                                        */}
+        {/* --------------------------------------------------------------- */}
+        <div className="w-full mt-[-10px]">
+          <LyricBar />
+        </div>
+
+      </main>
     </div>
   );
 }

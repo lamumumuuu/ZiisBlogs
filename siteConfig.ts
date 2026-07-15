@@ -6,6 +6,7 @@ export const siteConfig = {
   author: "Ziis",
   authorName: "Ziis",
   avatarUrl: "/avatar.jpg",
+  bio: "专注于计算化学、人工智能与软件工程的交叉应用。",
   faviconUrl: "/favicon.ico",
   navLogo: "Ziis",
   navTitle: "Ziis",
@@ -13,19 +14,19 @@ export const siteConfig = {
   navAfter: "领域",
 
   // ==================== 导航菜单 ====================
-// siteConfig.ts
-navItems: [
-  { name: '首页', href: '/' },
-  { name: '项目', href: '/projects' },
-  { name: '归档', href: '/timeline' },
-  { name: '照片墙', href: '/photowall' },
-  { name: '音乐', href: '/music' },
-  { name: '灵境', href: '/tree' },
-  { name: '说说', href: '/moments' },
-  { name: '杂谈', href: '/chatter' },
-  { name: '友链', href: '/friends' },
-  { name: '关于', href: '/about' },
-],
+  // siteConfig.ts
+  navItems: [
+    { name: '首页', href: '/' },
+    { name: '项目', href: '/projects' },
+    { name: '归档', href: '/timeline' },
+    // { name: '照片墙', href: '/photowall' },
+    { name: '音乐', href: '/music' },
+    { name: '灵境', href: '/tree' },
+    // { name: '说说', href: '/moments' },
+    // { name: '杂谈', href: '/chatter' },
+    { name: '友链', href: '/friends' },
+    { name: '关于', href: '/about' },
+  ],
 
   // ==================== 社交链接 ====================
   social: {
@@ -38,7 +39,7 @@ navItems: [
   // ==================== 关于页面配置 ====================
   aboutCoverImage: "https://bu.dusays.com/2026/03/24/69c23dc278c78.jpg", // 关于页面封面图
 
-  
+
   // ==================== 外观配置 ====================
   useGradient: false,
   themeColors: ["#a18cd1", "#fbc2eb", "#a1c4fd", "#c2e9fb"],

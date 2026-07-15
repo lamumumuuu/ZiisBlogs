@@ -1,4 +1,14 @@
-// app/layout.tsx
+// =====================================================================
+// 文件位置注释
+// =====================================================================
+// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
+// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\app\layout.tsx
+// 文件类型：Next.js App Router 根布局组件
+// 功能描述：应用根布局，包裹所有页面。包含背景层、导航栏、
+//          全局 Provider（MusicProvider、ToastProvider）等。
+//          所有页面共享此布局结构。
+// =====================================================================
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -7,6 +17,8 @@ import { siteConfig } from "../siteConfig";
 import BackgroundSlider from "../components/BackgroundSlider";
 import BackgroundEffects from "../components/BackgroundEffects";
 import Navbar from "../components/Navbar";
+import { MusicProvider } from "../components/MusicProvider";
+import { ToastProvider } from "../components/ToastProvider";
 
 
 const geistSans = Geist({
@@ -35,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col relative bg-slate-50 dark:bg-slate-950 transition-colors duration-1000">
-        
+
         {/* ========== 第1层：渐变背景 或 图片轮播 ========== */}
         {siteConfig.useGradient ? (
           // ----- 流动渐变 -----
@@ -65,12 +77,16 @@ export default function RootLayout({
         <BackgroundEffects />
 
         {/* ========== 内容层 ========== */}
-         <div className="relative z-10 flex-1 flex flex-col">
-          <Navbar />
-          <main className="flex-1 pt-16">
-            {children}
-          </main>
-        </div>
+        <MusicProvider>
+          <ToastProvider>
+            <div className="relative z-10 flex-1 flex flex-col">
+              <Navbar />
+              <main className="flex-1 pt-16">
+                {children}
+              </main>
+            </div>
+          </ToastProvider>
+        </MusicProvider>
 
         {/* ========== 注入动画关键帧 ========== */}
         <style>{`
