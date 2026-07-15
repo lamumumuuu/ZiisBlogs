@@ -1,6 +1,6 @@
 ---
 title: "关于我"
-cover: "cover: "/aboutbackground.jpg""
+cover: "/aboutbackground.jpg"
 ---
 
 个人简介
