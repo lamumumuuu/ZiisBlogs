@@ -1,11 +1,11 @@
 // components/LatestChatterCarousel.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 
-interface Chatter {
+export interface Chatter {
   slug: string;
   title: string;
   description: string;
@@ -17,20 +17,21 @@ interface Chatter {
 export default function LatestChatterCarousel({ chatters }: { chatters: Chatter[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const next = () => {
+  // ✅ 修复：使用 useCallback 包裹 next 和 prev，避免每次渲染重新创建
+  const next = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % chatters.length);
-  };
+  }, [chatters.length]);
 
-  const prev = () => {
+  const prev = useCallback(() => {
     setCurrentIndex((prev) => (prev - 1 + chatters.length) % chatters.length);
-  };
+  }, [chatters.length]);
 
-  // 自动轮播
+  // ✅ 修复：添加 next 和 prev 到依赖数组
   useEffect(() => {
     if (chatters.length <= 1) return;
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, [chatters.length]);
+  }, [next, chatters.length]);
 
   if (!chatters.length) {
     return (
@@ -42,9 +43,7 @@ export default function LatestChatterCarousel({ chatters }: { chatters: Chatter[
 
   const current = chatters[currentIndex];
 
-  // ================================================================
-  // 方案二：根据文字长度动态调整字号
-  // ================================================================
+  // 根据文字长度动态调整字号
   const getFontSize = (text: string) => {
     const length = text?.length || 0;
     if (length > 60) return 'text-xs';
@@ -68,9 +67,6 @@ export default function LatestChatterCarousel({ chatters }: { chatters: Chatter[
 
       {/* 内容 */}
       <Link href={`/chatter/${current.slug}`} className="flex-1 flex flex-col justify-center">
-        {/* ================================================================ */}
-        {/* 方案二应用：根据文字长度动态调整字号 */}
-        {/* ================================================================ */}
         <p
           className={`${getFontSize(
             current.description
@@ -80,7 +76,7 @@ export default function LatestChatterCarousel({ chatters }: { chatters: Chatter[
         </p>
       </Link>
 
-      {/* 底部：日期 */}
+      {/* 底部：日期 + 控制按钮 */}
       <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-200/50 dark:border-slate-700/50">
         <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
           {current.formattedDate || current.date || '刚刚'}
