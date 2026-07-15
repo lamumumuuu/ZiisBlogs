@@ -115,25 +115,36 @@ export default function HeroBanner() {
           </div>
         </div>
 
-        {/* 内容区域 */}
-        <div className="flex flex-col justify-center min-h-[24px]">
-          {/* 每日一言 - 打字机效果 */}
-          <p className="text-slate-800 dark:text-slate-200 font-medium text-base md:text-lg leading-snug">
-            {displayText}
-            {/* 光标闪烁效果 */}
-            <span className="inline-block w-[3px] h-5 bg-indigo-500 align-middle ml-0.5 animate-pulse rounded-full"></span>
-          </p>
+        {/* 
+          原布局使用 absolute 定位日期和作者，当文字过长时会与日期/作者重叠。
+          修改为 flex 列布局，让文字、日期、作者在垂直方向上自然排列，
+          文字区域自动换行，不再与日期重叠。
+        */}
+        
+        {/* 内容区域 - 改为 flex 列布局 */}
+        <div className="flex flex-col min-h-[24px]">
+          
+          {/* 第一行：每日一言（文字）+ 日期（右侧） */}
+          <div className="flex items-start gap-3 w-full">
+            {/* 文字区域：flex-1 占用剩余空间，允许换行 */}
+            <p className="flex-1 text-slate-800 dark:text-slate-200 font-medium text-base md:text-lg leading-snug break-words min-w-0">
+              {displayText}
+              {/* 光标闪烁效果 */}
+              <span className="inline-block w-[3px] h-5 bg-indigo-500 align-middle ml-0.5 animate-pulse rounded-full"></span>
+            </p>
+            
+            {/* 日期：固定在右侧，不换行 */}
+            <span className="text-[10px] md:text-xs font-mono text-slate-500 dark:text-slate-400 bg-white/30 dark:bg-slate-900/30 px-2 py-0.5 rounded-md whitespace-nowrap flex-shrink-0 mt-0.5">
+              {currentDate}
+            </span>
+          </div>
+          
+          {/* 第二行：作者信息（左对齐，与文字对齐） */}
+          <div className="mt-1 text-[10px] font-bold text-indigo-500/70 dark:text-indigo-400/70 tracking-wide">
+            {quotes[quoteIndex]?.author || ""}
+          </div>
         </div>
 
-        {/* 右上角日期标签 */}
-        <div className="absolute top-3 right-5 text-[10px] md:text-xs font-mono text-slate-500 dark:text-slate-400 bg-white/30 dark:bg-slate-900/30 px-2 py-0.5 rounded-md">
-          {currentDate}
-        </div>
-
-        {/* 底部作者信息 */}
-        <div className="absolute bottom-1 right-5 text-[10px] font-bold text-indigo-500/70 dark:text-indigo-400/70 tracking-wide">
-          {quotes[quoteIndex]?.author || ""}
-        </div>
       </div>
     </div>
   );
