@@ -1,9 +1,4 @@
-// =====================================================================
-// 文件位置注释
-// =====================================================================
-// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
-// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\components\MusicProvider.tsx
-// 文件类型：React Context Provider 组件（客户端组件）
+//components\MusicProvider.tsx
 // 功能描述：全局音乐播放器状态管理，通过 React Context 提供
 //          播放列表、当前歌曲、播放状态、进度控制等功能。
 //          放置在根 layout 中，实现跨页面音乐播放不中断。

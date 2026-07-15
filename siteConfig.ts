@@ -6,7 +6,7 @@ export const siteConfig = {
   author: "Ziis",
   authorName: "Ziis",
   avatarUrl: "/avatar.jpg",
-  bio: "专注于计算化学、人工智能与软件工程的交叉应用。",
+  bio: "一个在代码和数字之间穿梭的臭咸鱼。近期正埋头于 **Web 项目的基础学习**，喜欢折腾各种有趣的技术，偶尔也会写写博客记录自己的成长。",
   faviconUrl: "/favicon.ico",
   navLogo: "Ziis",
   navTitle: "Ziis",
@@ -17,8 +17,8 @@ export const siteConfig = {
   // siteConfig.ts
   navItems: [
     { name: '首页', href: '/' },
-    { name: '项目', href: '/projects' },
-    { name: '归档', href: '/timeline' },
+    // { name: '项目', href: '/projects' },
+    // { name: '归档', href: '/timeline' },
     // { name: '照片墙', href: '/photowall' },
     { name: '音乐', href: '/music' },
     { name: '灵境', href: '/tree' },
@@ -35,11 +35,6 @@ export const siteConfig = {
     qq: "2563808918",
   },
 
-
-  // ==================== 关于页面配置 ====================
-  aboutCoverImage: "https://bu.dusays.com/2026/03/24/69c23dc278c78.jpg", // 关于页面封面图
-
-
   // ==================== 外观配置 ====================
   useGradient: false,
   themeColors: ["#a18cd1", "#fbc2eb", "#a1c4fd", "#c2e9fb"],
@@ -50,7 +45,10 @@ export const siteConfig = {
   ],
 
   // ==================== 音乐配置 ====================
-  cloudMusicIds: ["1809646618", "3361076230", "1859390262"],
+  cloudMusicIds:
+    [
+      "17704042009"//辉夜姬10首
+    ],
 
   // ==================== Gitalk 评论配置 ====================
   gitalkConfig: {
@@ -62,5 +60,5 @@ export const siteConfig = {
   },
 
   // ==================== 页脚 ====================
-  footerText: "© 2026 Ziis. 用 ❤️ 和 Next.js 构建",
+  footerText: "© 2026 Ziis Next.js 构建",
 };

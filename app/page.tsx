@@ -1,9 +1,4 @@
-// =====================================================================
-// 文件位置注释
-// =====================================================================
-// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
-// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\app\page.tsx
-// 文件类型：Next.js App Router 服务器组件（首页）
+//app/page.tsx
 // 功能描述：首页页面组件，整合 HeroBanner（搜索栏替代品）、
 //          ProfileCard（个人资料卡片）、CloudPlayer（音乐播放器）、
 //          LyricBar（歌词显示栏）等组件。

@@ -1,9 +1,4 @@
-// =====================================================================
-// 文件位置注释
-// =====================================================================
-// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
-// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\components\ProfileCard.tsx
-// 文件类型：React 客户端组件
+//components\ProfileCard.tsx
 // 功能描述：首页个人资料卡片组件，展示方形头像、昵称、个性签名、
 //          数据统计（文章/项目/照片）和社交媒体图标。
 //          点击卡片跳转到关于页面。
@@ -11,6 +6,7 @@
 
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { siteConfig } from '../siteConfig';
 import { useToast } from './ToastProvider';
@@ -19,11 +15,13 @@ import Image from 'next/image';
 // =====================================================================
 // 类型定义
 // =====================================================================
+/*
 interface ProfileCardProps {
   postCount?: number;    // 文章数量
   projectCount?: number; // 项目数量
   photoCount?: number;   // 照片数量
 }
+*/
 
 // =====================================================================
 // ProfileCard 组件 - 个人资料卡片
@@ -43,13 +41,52 @@ interface ProfileCardProps {
 //   - 社交图标按钮在卡片右下角，点击事件阻止冒泡（不触发卡片跳转）
 //   - 复制功能使用 navigator.clipboard API，配合 Toast 反馈
 // =====================================================================
-export default function ProfileCard({
-  postCount = 0,
-  projectCount = 0,
-  photoCount = 0,
-}: ProfileCardProps) {
+
+// =====================================================================
+// 建站时间（硬编码）
+// =====================================================================
+const BUILD_DATE = new Date('2026-07-14T16:00:00');
+
+export default function ProfileCard() {
   const router = useRouter();
   const { showToast } = useToast();
+
+  // ===================================================================
+  // 时间状态
+  // ===================================================================
+  const [currentTime, setCurrentTime] = useState('');
+  const [uptime, setUptime] = useState('');
+
+  // ===================================================================
+  // 更新时间（每秒刷新）
+  // ===================================================================
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+
+      // 1. 当前时间 (时:分:秒)
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      setCurrentTime(`${hours}:${minutes}:${seconds}`);
+
+      // 2. 计算运行时长 (天 + 小时)
+      const diffMs = now.getTime() - BUILD_DATE.getTime();
+      if (diffMs > 0) {
+        const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const days = Math.floor(totalHours / 24);
+        const hoursLeft = totalHours % 24;
+        setUptime(`${days}天 ${hoursLeft}小时`);
+      } else {
+        setUptime('刚刚启动');
+      }
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // ===================================================================
   // 复制到剪贴板
@@ -111,12 +148,23 @@ export default function ProfileCard({
       </div>
 
       {/* =================================================================== */}
-      {/* 底部：数据统计 + 社交图标                                              */}
+      {/* 底部：时间信息 + 社交图标                                           */}
       {/* =================================================================== */}
       <div className="flex flex-col md:flex-row items-center md:items-end justify-between mt-6 md:mt-8 gap-5 md:gap-6 relative z-10">
         
-        {/* ---- 数据统计区 ---- */}
-        {/* 替代原来的"杂谈、说说、图片"计数，改为"文章、项目、照片" */}
+        {/* ---- 时间信息区（替代原统计项） ---- */}
+        <div className="flex-1 w-full md:w-auto px-4 py-3 rounded-2xl bg-white/30 dark:bg-white/5 border border-white/20 dark:border-white/10 text-center">
+          <div className="text-2xl sm:text-3xl md:text-4xl font-mono font-black text-indigo-600 dark:text-indigo-400 tracking-wider">
+            {currentTime}
+          </div>
+          <div className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium flex items-center justify-center gap-1.5">
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            系统已稳定运行：{uptime}
+          </div>
+        </div>
+
+        {/* ---- 原数据统计区（已注释保留） ---- */}
+        {/*
         <div className="flex gap-2 sm:gap-6 w-full md:w-auto justify-between sm:justify-around md:justify-start px-2 sm:px-0">
           <StatItem count={postCount} label="文章" color="text-indigo-600 dark:text-indigo-400" />
           <div className="w-px h-8 md:h-10 bg-slate-300/50 dark:bg-slate-700 hidden md:block"></div>
@@ -124,6 +172,7 @@ export default function ProfileCard({
           <div className="w-px h-8 md:h-10 bg-slate-300/50 dark:bg-slate-700 hidden md:block"></div>
           <StatItem count={photoCount} label="照片" color="text-pink-600 dark:text-pink-400" />
         </div>
+        */}
 
         {/* ---- 社交图标区 ---- */}
         {/* onClick={(e) => e.stopPropagation()} 防止点击图标时触发卡片跳转 */}
