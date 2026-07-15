@@ -66,15 +66,12 @@ export default async function AboutPage() {
 
   return (
     <div className="min-h-screen relative pb-20">
+      {/* ✅ 页面级尺寸：宽度、最大宽度、边距、顶部间距 */}
       <Suspense fallback={<div className="h-96 flex items-center justify-center text-slate-500 font-bold animate-pulse">正在载入档案...</div>}>
-        {/* ✅ 页面级尺寸：宽度、最大宽度、边距、顶部间距 */}
         <main className="w-[95%] md:w-[90%] max-w-4xl mx-auto mt-24 md:mt-28 relative z-10">
           <AboutClient
             contentHtml={contentHtml}
             coverImage={coverImage}
-            author={siteConfig.author}
-            avatarUrl={siteConfig.avatarUrl}
-            social={siteConfig.social}
           />
         </main>
       </Suspense>
