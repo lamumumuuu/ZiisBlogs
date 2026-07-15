@@ -54,11 +54,7 @@ export default function Home() {
 
           {/* 个人资料卡片 - 左侧，占 7 列 */}
           <div className="col-span-1 lg:col-span-7 flex flex-col">
-            <ProfileCard
-              postCount={0}
-              projectCount={0}
-              photoCount={0}
-            />
+            <ProfileCard />   {/* ✅ 移除 props */}
           </div>
 
           {/* 音乐播放器卡片 - 右侧，占 5 列 */}
