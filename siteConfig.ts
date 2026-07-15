@@ -49,6 +49,10 @@ export const siteConfig = {
     [
       "17704042009"//辉夜姬10首
     ],
+  
+  
+  // ==================== 关于页面封面图 ====================
+  aboutCoverImage: "/aboutbackground.jpg",
 
   // ==================== Gitalk 评论配置 ====================
   gitalkConfig: {
