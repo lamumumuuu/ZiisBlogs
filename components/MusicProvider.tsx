@@ -143,7 +143,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [currentLyric, setCurrentLyric] = useState("正在连接高可用神经云端...");
   // 根据是否配置音乐 ID 来设置初始加载状态，避免在 effect 中直接设置
   const [isLoading, setIsLoading] = useState(() => (siteConfig.cloudMusicIds?.length ?? 0) > 0);
-  const [volume, setVolumeState] = useState(1);
+  const [volume, setVolumeState] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
   const [playMode, setPlayMode] = useState<PlayMode>('loop');
 
