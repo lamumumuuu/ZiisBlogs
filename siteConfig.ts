@@ -6,7 +6,7 @@ export const siteConfig = {
   author: "Ziis",
   authorName: "Ziis",
   avatarUrl: "/avatar.jpg",
-  bio: "一个在代码和数字之间穿梭的臭咸鱼。近期正埋头于 **Web 项目的基础学习**，喜欢折腾各种有趣的技术，偶尔也会写写博客记录自己的成长。",
+  bio: "一个在代码和数字之间穿梭的臭咸鱼。近期正埋头于Web 项目的基础学习，喜欢折腾各种有趣的技术，偶尔记录下自己的成长。",
   faviconUrl: "/favicon.ico",
   navLogo: "Ziis",
   navTitle: "Ziis",

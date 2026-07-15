@@ -87,10 +87,10 @@ function parseLrc(lrcText: string): { time: number; text: string }[] {
 
   for (const line of lines) {
     // 匹配时间标签，支持 [mm:ss] 和 [mm:ss.xx] 格式
-    const matches = [...line.matchAll(/\[(\d{2,}):(\d{2})(?:\.(\d{2,3}))?\]/g)];
+    const matches = [...line.matchAll(/\[(\d{2,}):(\d{2})(?:[.:](\d{2,3}))?\]/g)];
     if (matches.length > 0) {
       // 移除所有时间标签，获取纯文本
-      const text = line.replace(/\[\d{2,}:\d{2}(?:\.\d{2,3})?\]/g, '').trim();
+      const text = line.replace(/\[\d{2,}:\d{2}(?:[.:]\d{2,3})?\]/g, '').trim();
       // 清除控制字符和零宽字符
       const cleanText = text.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200D\uFEFF]/g, "");
 
