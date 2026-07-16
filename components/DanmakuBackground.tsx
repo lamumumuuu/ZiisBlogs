@@ -1,7 +1,11 @@
-// components/DanmakuBackground.tsx
 // =====================================================================
-// 修改内容：弹幕位置固定在上半部分（5%-50%），透明度固定为 25%，
-//          最大字号调小至 12-20px，z-index 提高至 30 避免被毛玻璃遮挡
+// 文件位置注释
+// =====================================================================
+// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
+// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\components\DanmakuBackground.tsx
+// 文件类型：React 客户端组件
+// 功能描述：背景弹幕特效，在页面顶部区域滚动显示趣味文字。
+//          限制在 30vh 高度内，z-index 为 0（在内容层下方）。
 // =====================================================================
 
 "use client";
@@ -9,17 +13,27 @@
 import { useState } from 'react';
 import { siteConfig } from '../siteConfig';
 
+// =====================================================================
+// 弹幕数据结构
+// =====================================================================
 interface DanmakuItem {
   id: number;
   text: string;
-  top: string;
-  duration: number;
-  delay: number;
-  opacity: number;
-  fontSize: number;
+  top: number;      // 容器内的百分比位置
+  duration: number; // 滚动动画时长
+  delay: number;    // 动画延迟
 }
 
+// =====================================================================
+// 弹幕背景组件
+// =====================================================================
+// 设计思路：
+//   1. 容器限制在 top-28 到 h-[30vh] 区域内，避免覆盖卡片
+//   2. z-0 确保在内容层下方，只作为背景装饰
+//   3. 低透明度（浅色 30% / 深色 10%），不干扰阅读
+// =====================================================================
 export default function DanmakuBackground() {
+  // 生成弹幕数据
   const [danmakus] = useState<DanmakuItem[]>(() => {
     const texts = siteConfig.danmakuList || [
       '在干嘛呢？',
@@ -36,19 +50,16 @@ export default function DanmakuBackground() {
       '到底在干嘛？',
     ];
 
-    const count = 20 + Math.floor(Math.random() * 10);
+    const count = 15;
     const items: DanmakuItem[] = [];
 
     for (let i = 0; i < count; i++) {
-      const text = texts[Math.floor(Math.random() * texts.length)];
       items.push({
         id: i,
-        text,
-        top: `${Math.random() * 45 + 5}%`, // 5%-50% 上半部分
-        duration: 8 + Math.random() * 12,
-        delay: Math.random() * -30,
-        opacity: 0.25, // 固定透明度 25%
-        fontSize: 12 + Math.floor(Math.random() * 8), // 12-20px
+        text: texts[Math.floor(Math.random() * texts.length)],
+        top: Math.random() * 80 + 10, // 10%-90%，避免文字被切掉
+        duration: Math.random() * 20 + 25, // 25-45秒滚动一圈
+        delay: Math.random() * 20, // 随机延迟，错开出现
       });
     }
 
@@ -56,28 +67,25 @@ export default function DanmakuBackground() {
   });
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-[30] select-none">
+    // 弹幕容器：限制在顶部 30vh 区域，z-0 在内容层下方
+    <div className="fixed top-28 h-[30vh] left-0 right-0 overflow-hidden pointer-events-none z-0">
+      {/* 滚动动画关键帧 */}
       <style>{`
-        @keyframes danmakuScroll {
-          0% { transform: translateX(100vw); opacity: 0; }
-          2% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { transform: translateX(-200%); opacity: 0; }
+        @keyframes float-left {
+          0% { right: -100%; transform: translateX(100%); }
+          100% { right: 100%; transform: translateX(-100%); }
         }
       `}</style>
 
+      {/* 弹幕列表 */}
       {danmakus.map((item) => (
         <div
           key={item.id}
-          className="absolute whitespace-nowrap font-bold tracking-wider"
+          className="absolute whitespace-nowrap text-white/30 dark:text-white/10 font-bold text-lg tracking-wider select-none"
           style={{
-            top: item.top,
-            fontSize: `${item.fontSize}px`,
-            color: 'rgba(255, 255, 255, 0.8)',
-            textShadow: '0 0 10px rgba(99, 102, 241, 0.3), 0 0 30px rgba(99, 102, 241, 0.1)',
-            opacity: item.opacity,
-            animation: `danmakuScroll ${item.duration}s linear infinite`,
-            animationDelay: `${item.delay}s`,
+            top: `${item.top}%`,
+            right: '-100%',
+            animation: `float-left ${item.duration}s linear ${item.delay}s infinite`,
           }}
         >
           {item.text}

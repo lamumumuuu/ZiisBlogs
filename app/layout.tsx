@@ -55,17 +55,17 @@ export default function RootLayout({
         {/* 第1层：图片轮播（最底层） */}
         <BackgroundSlider />
 
-        {/* ========== 弹幕背景层 ========== */}
+        {/* 第2层：弹幕背景（在遮罩下方，不会覆盖卡片） */}
         {/* 在桌面端显示，手机端隐藏*/}
         <div className="hidden md:block">
           <DanmakuBackground />
         </div>
 
-        {/* 第2层：半透明白色遮罩 */}
+        {/* 第3层：半透明白色遮罩 */}
         {/* 改 backdrop-blur-sm → backdrop-blur-md */}
         <div className="fixed inset-0 -z-10 bg-white/30 dark:bg-slate-900/40 backdrop-blur-md" />
 
-        {/* 第3层：动态渐变叠加层 */}
+        {/* 第4层：动态渐变叠加层 */}
         {/* 改 mix-blend-overlay → mix-blend-color，改 opacity-60 → opacity-60 dark:opacity-20 */}
         <div
           className="fixed inset-0 -z-10 opacity-60 dark:opacity-20 mix-blend-color transition-opacity duration-1000"
@@ -76,12 +76,12 @@ export default function RootLayout({
           }}
         />
 
-        {/* 第4层：模糊光晕 */}
+        {/* 第5层：模糊光晕 */}
         {/* 改 w-[60%] h-[60%] → w-[40%] h-[40%] */}
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/40 dark:bg-indigo-900/20 blur-[100px] rounded-full z-[-7] md:mix-blend-overlay" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-400/30 dark:bg-purple-900/30 blur-[100px] rounded-full z-[-7] md:mix-blend-overlay" />
-        
-        {/* ========== 第5层：樱花特效（替换粒子特效） ========== */}
+
+        {/* 第6层：樱花特效 */}
         <Sakura />
 
         {/* ========== 点击特效 ========== */}
