@@ -1,16 +1,12 @@
+// app/music/MusicClient.tsx
 // =====================================================================
-// 文件位置：app/music/MusicClient.tsx
-// 文件类型：Next.js 客户端组件（Client Component）
-// 功能描述：音乐页面核心交互组件，包含播放器控制、歌词显示、
-//          歌单管理、搜索过滤、评论区等完整功能。
-//          完全对齐 XH 大佬的设计，适配当前 MusicProvider。
+// 功能描述：音乐页面 - 客户端组件
+//          布局参考 nothing-new.icu/music
+//          方形封面、背景融合、无评论
 // =====================================================================
 
 "use client";
 
-// =====================================================================
-// 依赖导入
-// =====================================================================
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -26,10 +22,8 @@ import {
   VolumeX,
   Search,
   X,
-  MessageSquare,
 } from 'lucide-react';
 import { useMusic } from '../../components/music/MusicProvider';
-import Comments from '../../components/Comments';
 
 // =====================================================================
 // 类型定义
@@ -78,7 +72,7 @@ export default function MusicClient() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // ===================================================================
-  // 歌词数据：直接使用 currentSong.lyrics（已由 MusicProvider 解析）
+  // 歌词数据
   // ===================================================================
   const parsedLyrics = useMemo((): LyricLine[] => {
     if (!currentSong) return [];
@@ -162,7 +156,7 @@ export default function MusicClient() {
       <div className="min-h-screen relative pb-32 flex flex-col">
         <div className="flex-1 flex flex-col items-center justify-center animate-pulse gap-4">
           <Disc3 size={48} className="text-indigo-500 animate-spin" />
-          <span className="font-black text-slate-500 tracking-widest text-sm">唤醒音频引擎中...</span>
+          <span className="font-black text-slate-500 tracking-widest text-sm">正在加载音乐...</span>
         </div>
       </div>
     );
@@ -176,129 +170,131 @@ export default function MusicClient() {
   return (
     /* eslint-disable @next/next/no-img-element */
     <div className="min-h-screen relative pb-10 flex flex-col">
-      {/* 背景模糊层 */}
+      {/* ================================================================
+          背景层：使用当前歌曲封面，若隐若现
+          透明度调高至 30-40%，让背景既能看到封面又不会喧宾夺主
+      ================================================================ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div
-          className="absolute inset-[-10%] bg-cover bg-center transition-all duration-1000 blur-[50px] opacity-40 dark:opacity-20 saturate-150"
+          className="absolute inset-[-10%] bg-cover bg-center transition-all duration-1000 blur-[60px] opacity-40 dark:opacity-30 saturate-150"
           style={{ backgroundImage: `url(${songCover})` }}
         />
-        <div className="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-white/50 dark:bg-black/50 backdrop-blur-sm" />
       </div>
 
-      {/* 主容器 */}
-      <div className="w-full max-w-7xl mx-auto mt-24 md:mt-28 px-4 sm:px-6 md:px-10 relative z-10">
+      {/* ================================================================
+          主容器
+      ================================================================ */}
+      <div className="w-full max-w-6xl mx-auto mt-24 md:mt-28 px-4 sm:px-6 md:px-10 relative z-10">
         {/* 标题区 */}
         <div className="animate-fade-in-up mb-6 md:mb-10 text-center md:text-left">
           <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-widest mb-1 md:mb-2 transition-colors duration-700">
-            云端乐律
+            音乐
           </h1>
           <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-medium tracking-wider transition-colors duration-700">
-            在代码的缝隙中寻找灵魂的共鸣
+            {isPlaying ? '正在播放' : '已暂停'}
           </p>
         </div>
 
-        {/* 主布局 */}
-        <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 w-full md:items-stretch md:h-[calc(100vh-320px)] md:min-h-[600px] md:max-h-[720px]">
-          {/* 左侧：播放控制台 */}
-          <div className="md:col-span-5 flex flex-col bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[32px] shadow-2xl p-6 md:p-10 relative overflow-hidden transition-all duration-500 shrink-0 min-h-[460px] sm:min-h-[500px] md:min-h-0">
-            <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full overflow-hidden py-4 md:py-0">
-              {/* 旋转封面 */}
-              <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-64 lg:h-64 flex-shrink-0 aspect-square mb-6 md:mb-10 flex items-center justify-center">
-                <div
-                  className={`absolute inset-0 m-auto w-[85%] h-[85%] bg-indigo-500/25 blur-[35px] rounded-full transition-all duration-1000 z-0 ${
-                    isPlaying ? 'opacity-90 scale-105' : 'opacity-20 scale-100'
-                  }`}
-                />
-                <div className="absolute inset-0 m-auto w-[90%] h-[90%] rounded-full shadow-[0_0_40px_-5px_rgba(99,102,241,0.4)] z-0" />
+        {/* ==============================================================
+            主布局：左侧播放器（更宽） + 右侧面板
+        ============================================================== */}
+        <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 w-full md:items-stretch md:min-h-[500px]">
 
-                <motion.div
-                  className={`absolute inset-0 w-full h-full rounded-full border-[4px] md:border-[6px] border-white/80 dark:border-slate-600/80 shadow-2xl overflow-hidden transition-transform duration-700 z-10 rotating-disc ${
-                    isPlaying ? 'scale-100' : 'scale-95'
-                  }`}
-                  style={{ animationPlayState: isPlaying ? 'running' : 'paused' }}
-                >
-                  <img
-                    src={songCover}
-                    alt="cover"
-                    className="w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 m-auto w-10 h-10 md:w-12 md:h-12 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full z-30 shadow-inner border border-slate-300 dark:border-slate-700" />
-                  <div
-                    className="absolute inset-0 z-20 rounded-full pointer-events-none opacity-20"
-                    style={{
-                      background:
-                        'conic-gradient(from 0deg, transparent, rgba(255,255,255,0.4), transparent, rgba(255,255,255,0.4), transparent)',
-                    }}
-                  />
-                </motion.div>
+          {/* ============================================================
+              左侧：播放器（占 7 列，更宽）
+          ============================================================ */}
+          <div className="md:col-span-7 flex flex-col bg-white/30 dark:bg-slate-800/30 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[32px] shadow-2xl p-6 md:p-10 relative overflow-hidden transition-all duration-500 shrink-0">
+
+            {/* 封面 + 歌曲信息（横向布局） */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8">
+              {/* ===== 方形封面（无圆角，无旋转） ===== */}
+              <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 flex-shrink-0 overflow-hidden shadow-2xl rounded-2xl bg-slate-200 dark:bg-slate-700">
+                <img
+                  src={songCover}
+                  alt="cover"
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
               </div>
 
               {/* 歌曲信息 */}
-              <div className="w-full text-center px-2 md:px-4 mb-2 md:mb-6">
-                <h1 className="text-lg md:text-xl lg:text-2xl font-black text-slate-900 dark:text-white truncate drop-shadow-sm tracking-tight">
+              <div className="flex-1 text-center sm:text-left">
+                <h1 className="text-xl md:text-2xl lg:text-3xl font-black text-slate-900 dark:text-white truncate drop-shadow-sm tracking-tight">
                   {currentSong.title}
                 </h1>
-                <h2 className="text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 truncate mt-1 md:mt-2 tracking-widest">
+                <h2 className="text-sm md:text-base font-bold text-slate-500 dark:text-slate-400 truncate mt-1 md:mt-2 tracking-widest">
                   {currentSong.artist}
                 </h2>
+
+                {/* 播放模式标签 */}
+                <div className="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/30 dark:bg-slate-700/30 text-xs font-medium text-slate-600 dark:text-slate-300">
+                  {getPlayModeIcon()}
+                  <span>{playMode === 'loop' ? '列表循环' : playMode === 'single' ? '单曲循环' : '随机播放'}</span>
+                </div>
+
+                {/* 歌曲序号 */}
+                <div className="mt-2 text-xs text-slate-400 dark:text-slate-500 font-mono">
+                  {playlist.findIndex(s => s.id === currentSong.id) + 1} / {playlist.length}
+                </div>
               </div>
             </div>
 
             {/* 进度条 + 控制 */}
-            <div className="w-full mt-auto relative z-20">
-              <div className="w-full flex flex-col gap-1.5 mb-6 md:mb-8 px-1 md:px-3">
+            <div className="w-full mt-6 md:mt-8 relative z-20">
+              {/* 进度条 */}
+              <div className="w-full flex flex-col gap-1.5 mb-4 px-1 md:px-3">
                 <input
                   type="range"
                   min="0"
                   max="100"
                   value={progress || 0}
                   onChange={handleSeek}
-                  className="w-full h-1 md:h-1.5 rounded-full appearance-none cursor-pointer"
+                  className="w-full h-1.5 md:h-2 rounded-full appearance-none cursor-pointer"
                   style={{
-                    background: `linear-gradient(to right, #4f46e5 ${progress}%, rgba(0, 0, 0, 0.15) 0)`,
+                    background: `linear-gradient(to right, #4f46e5 ${progress}%, rgba(148, 163, 184, 0.3) ${progress}%)`,
                   }}
                 />
-                <div className="flex justify-between text-[10px] md:text-xs font-bold text-slate-500 dark:text-slate-400 tabular-nums">
+                <div className="flex justify-between text-xs md:text-sm font-bold text-slate-500 dark:text-slate-400 tabular-nums">
                   <span>{formatTime(currentTime)}</span>
                   <span>{formatTime(duration)}</span>
                 </div>
               </div>
 
-              <div className="w-full flex items-center justify-between px-1 md:px-2 lg:px-4">
+              {/* 控制按钮 */}
+              <div className="w-full flex items-center justify-center gap-4 md:gap-6 px-1 md:px-2">
                 <button
                   onClick={togglePlayMode}
                   className="p-2 transition-transform hover:scale-110"
+                  title={playMode === 'loop' ? '列表循环' : playMode === 'single' ? '单曲循环' : '随机播放'}
                 >
                   {getPlayModeIcon()}
                 </button>
 
-                <div className="flex items-center gap-3 md:gap-4 lg:gap-6">
-                  <button
-                    onClick={prevSong}
-                    className="p-2 text-slate-700 dark:text-slate-300 hover:text-indigo-500 transition-transform hover:scale-110"
-                  >
-                    <SkipBack size={24} className="md:w-7 md:h-7" fill="currentColor" />
-                  </button>
+                <button
+                  onClick={prevSong}
+                  className="p-2 text-slate-700 dark:text-slate-300 hover:text-indigo-500 transition-transform hover:scale-110"
+                >
+                  <SkipBack size={24} className="md:w-7 md:h-7" fill="currentColor" />
+                </button>
 
-                  <button
-                    onClick={togglePlay}
-                    className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 flex items-center justify-center bg-indigo-500 text-white rounded-full hover:scale-105 shadow-xl shadow-indigo-500/40"
-                  >
-                    {isPlaying ? (
-                      <Pause size={28} className="md:w-8 md:h-8" fill="currentColor" />
-                    ) : (
-                      <Play size={28} className="md:w-8 md:h-8 ml-1" fill="currentColor" />
-                    )}
-                  </button>
+                <button
+                  onClick={togglePlay}
+                  className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center bg-indigo-500 text-white rounded-full hover:scale-105 shadow-xl shadow-indigo-500/40 transition-all"
+                >
+                  {isPlaying ? (
+                    <Pause size={28} className="md:w-8 md:h-8" fill="currentColor" />
+                  ) : (
+                    <Play size={28} className="md:w-8 md:h-8 ml-1" fill="currentColor" />
+                  )}
+                </button>
 
-                  <button
-                    onClick={nextSong}
-                    className="p-2 text-slate-700 dark:text-slate-300 hover:text-indigo-500 transition-transform hover:scale-110"
-                  >
-                    <SkipForward size={24} className="md:w-7 md:h-7" fill="currentColor" />
-                  </button>
-                </div>
+                <button
+                  onClick={nextSong}
+                  className="p-2 text-slate-700 dark:text-slate-300 hover:text-indigo-500 transition-transform hover:scale-110"
+                >
+                  <SkipForward size={24} className="md:w-7 md:h-7" fill="currentColor" />
+                </button>
 
                 {/* 音量控制 */}
                 <div className="flex items-center" onMouseLeave={() => setShowVolumeSlider(false)}>
@@ -319,7 +315,7 @@ export default function MusicClient() {
                           onChange={(e) => setVolume && setVolume(Number(e.target.value))}
                           className="w-16 h-1 appearance-none rounded-full cursor-pointer"
                           style={{
-                            background: `linear-gradient(to right, #4f46e5 ${(volume || 0) * 100}%, rgba(0, 0, 0, 0.15) 0)`,
+                            background: `linear-gradient(to right, #4f46e5 ${(volume || 0) * 100}%, rgba(148, 163, 184, 0.3) ${(volume || 0) * 100}%)`,
                           }}
                         />
                       </motion.div>
@@ -346,25 +342,28 @@ export default function MusicClient() {
             </div>
           </div>
 
-          {/* 右侧：歌词 / 歌单面板 */}
-          <div className="md:col-span-7 flex flex-col bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[32px] shadow-2xl relative transition-colors duration-700 overflow-hidden h-[450px] md:h-auto shrink-0">
-            <div className="flex items-center justify-center gap-1 p-1 mt-4 md:mt-6 mx-auto bg-white/50 dark:bg-slate-900/50 rounded-full shadow-inner border border-white/40 w-48 md:w-64 z-20 shrink-0">
+          {/* ============================================================
+              右侧：歌词 / 歌单 面板（占 5 列）
+          ============================================================ */}
+          <div className="md:col-span-5 flex flex-col bg-white/30 dark:bg-slate-800/30 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[32px] shadow-2xl relative transition-colors duration-700 overflow-hidden h-[450px] md:h-auto shrink-0">
+            {/* Tab 切换 */}
+            <div className="flex items-center justify-center gap-1 p-1 mt-4 md:mt-6 mx-auto bg-white/50 dark:bg-slate-900/50 rounded-full shadow-inner border border-white/40 w-48 md:w-56 z-20 shrink-0">
               <button
                 onClick={() => setActiveTab('lyrics')}
-                className={`flex-1 py-1.5 md:py-2 rounded-full font-black text-xs md:text-[13px] transition-all ${
+                className={`flex-1 py-1.5 md:py-2 rounded-full font-black text-xs md:text-sm transition-all ${
                   activeTab === 'lyrics'
                     ? 'bg-indigo-500 text-white shadow-md'
-                    : 'text-slate-500'
+                    : 'text-slate-500 hover:text-indigo-500'
                 }`}
               >
                 歌词
               </button>
               <button
                 onClick={() => setActiveTab('playlist')}
-                className={`flex-1 py-1.5 md:py-2 rounded-full font-black text-xs md:text-[13px] transition-all ${
+                className={`flex-1 py-1.5 md:py-2 rounded-full font-black text-xs md:text-sm transition-all ${
                   activeTab === 'playlist'
                     ? 'bg-indigo-500 text-white shadow-md'
-                    : 'text-slate-500'
+                    : 'text-slate-500 hover:text-indigo-500'
                 }`}
               >
                 歌单
@@ -372,17 +371,17 @@ export default function MusicClient() {
             </div>
 
             <div className="flex-1 relative mt-2 flex flex-col overflow-hidden">
-              {/* 歌词 Tab */}
+              {/* ======== 歌词 Tab ======== */}
               {activeTab === 'lyrics' && (
                 <div className="absolute inset-0 flex flex-col h-full animate-in fade-in duration-300">
-                  <div className="absolute top-0 left-0 right-0 h-32 md:h-40 bg-gradient-to-b from-white/40 dark:from-slate-800/60 to-transparent z-10 pointer-events-none" />
-                  <div className="absolute bottom-0 left-0 right-0 h-32 md:h-40 bg-gradient-to-t from-white/40 dark:from-slate-800/60 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute top-0 left-0 right-0 h-20 md:h-28 bg-gradient-to-b from-white/30 dark:from-slate-800/40 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 h-20 md:h-28 bg-gradient-to-t from-white/30 dark:from-slate-800/40 to-transparent z-10 pointer-events-none" />
 
                   <div
                     ref={lyricContainerRef}
                     className="h-full overflow-y-auto no-scrollbar scroll-smooth relative px-4 md:px-6 lyric-mask-container"
                   >
-                    <div className="py-[30vh] md:py-[35vh] flex flex-col gap-4 md:gap-6 text-center lg:px-10">
+                    <div className="py-[20vh] md:py-[25vh] flex flex-col gap-3 md:gap-4 text-center lg:px-6">
                       {parsedLyrics.length > 0 ? (
                         parsedLyrics.map((line, index) => {
                           const isActive = index === activeLyricIndex;
@@ -390,10 +389,10 @@ export default function MusicClient() {
                             <div
                               key={index}
                               ref={isActive ? activeLyricRef : null}
-                              className={`transition-all duration-700 cursor-pointer px-2 md:px-4 rounded-2xl ${
+                              className={`transition-all duration-700 cursor-pointer px-2 md:px-3 rounded-xl ${
                                 isActive
-                                  ? 'opacity-100 scale-105 py-2 md:py-3 bg-white/10'
-                                  : 'opacity-20 hover:opacity-40'
+                                  ? 'opacity-100 scale-105 py-1.5 md:py-2 bg-white/10'
+                                  : 'opacity-30 hover:opacity-60'
                               }`}
                               onClick={() =>
                                 duration > 0 &&
@@ -405,16 +404,11 @@ export default function MusicClient() {
                               }
                             >
                               <p
-                                className={`font-black tracking-tight leading-relaxed transition-all duration-700 ${
+                                className={`font-medium tracking-wide leading-relaxed transition-all duration-700 ${
                                   isActive
-                                    ? 'text-lg md:text-2xl text-indigo-600 dark:text-indigo-400'
-                                    : 'text-sm md:text-lg text-slate-700 dark:text-slate-300'
+                                    ? 'text-base md:text-lg text-indigo-600 dark:text-indigo-400 font-bold'
+                                    : 'text-sm md:text-base text-slate-600 dark:text-slate-400'
                                 }`}
-                                style={
-                                  isActive
-                                    ? { textShadow: '0 0 20px rgba(99,102,241,0.15)' }
-                                    : {}
-                                }
                               >
                                 {line.text}
                               </p>
@@ -425,8 +419,8 @@ export default function MusicClient() {
                         <div className="h-full flex items-center justify-center">
                           <div className="flex flex-col items-center gap-3 md:gap-4">
                             <Disc3 className="animate-spin text-indigo-500/40" size={32} />
-                            <p className="text-base md:text-xl font-black text-indigo-500 animate-pulse">
-                              {currentLyric || '正在捕获旋律中...'}
+                            <p className="text-base md:text-lg font-medium text-indigo-500 animate-pulse">
+                              {currentLyric || '正在加载歌词...'}
                             </p>
                           </div>
                         </div>
@@ -436,24 +430,23 @@ export default function MusicClient() {
                 </div>
               )}
 
-              {/* 歌单 Tab */}
+              {/* ======== 歌单 Tab ======== */}
               {activeTab === 'playlist' && (
-                <div className="absolute inset-0 px-4 md:px-8 pb-4 md:pb-8 pt-2 md:pt-4 animate-in fade-in duration-300 flex flex-col">
+                <div className="absolute inset-0 px-4 md:px-6 pb-4 md:pb-6 pt-2 md:pt-3 animate-in fade-in duration-300 flex flex-col">
                   {/* 搜索框 */}
-                  <div className="relative w-full max-w-md mx-auto group mb-4 md:mb-8 shrink-0">
-                    <div className="absolute inset-0 bg-indigo-500/5 blur-xl group-focus-within:bg-indigo-500/10 transition-all rounded-full" />
-                    <Search className="w-4 h-4 md:w-5 md:h-5 absolute left-4 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+                  <div className="relative w-full max-w-xs mx-auto group mb-3 md:mb-4 shrink-0">
+                    <Search className="w-4 h-4 md:w-4 md:h-4 absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                     <input
                       type="text"
-                      placeholder="搜索音轨..."
+                      placeholder="搜索歌曲..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full h-10 md:h-12 pl-10 md:pl-12 pr-10 md:pr-12 bg-white/30 dark:bg-slate-900/60 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-full text-xs md:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 shadow-inner transition-all"
+                      className="w-full h-9 md:h-10 pl-9 md:pl-9 pr-8 md:pr-8 bg-white/30 dark:bg-slate-900/60 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-full text-xs md:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 shadow-inner transition-all"
                     />
                     {searchQuery && (
                       <button
                         onClick={() => setSearchQuery('')}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 hover:bg-black/10 rounded-full transition-colors"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-black/10 rounded-full transition-colors"
                       >
                         <X size={14} className="text-slate-500" />
                       </button>
@@ -461,7 +454,7 @@ export default function MusicClient() {
                   </div>
 
                   {/* 歌单列表 */}
-                  <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 flex flex-col gap-2 md:gap-2.5">
+                  <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 flex flex-col gap-1.5 md:gap-2">
                     <AnimatePresence mode="popLayout">
                       {filteredPlaylist.map((song, index) => {
                         const isPlayingThis = song.id === currentSong.id;
@@ -473,44 +466,41 @@ export default function MusicClient() {
                             exit={{ opacity: 0, scale: 0.95 }}
                             key={song.id || index}
                             onClick={() => playSong(index)}
-                            className={`group flex items-center justify-between p-3 md:p-4 rounded-xl md:rounded-2xl cursor-pointer transition-all border ${
+                            className={`group flex items-center gap-3 p-2.5 md:p-3 rounded-xl md:rounded-2xl cursor-pointer transition-all ${
                               isPlayingThis
-                                ? 'bg-white/60 dark:bg-slate-700/80 shadow-md border-indigo-500/30'
-                                : 'border-transparent hover:bg-white/30 dark:hover:bg-slate-700/40'
+                                ? 'bg-indigo-500/20 dark:bg-indigo-500/30 border-l-4 border-indigo-500'
+                                : 'hover:bg-white/30 dark:hover:bg-slate-700/40 border-l-4 border-transparent'
                             }`}
                           >
-                            <div className="flex items-center gap-3 md:gap-4 w-[85%]">
-                              <div className="relative w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-lg md:rounded-xl overflow-hidden shadow-sm">
-                                <img
-                                  src={song.cover}
-                                  alt="cover"
-                                  className="w-full h-full object-cover"
-                                />
-                                {isPlayingThis && isPlaying && (
-                                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
-                                    <div className="flex gap-[3px] items-end h-2 md:h-3">
-                                      <span className="w-0.5 bg-white rounded-full animate-[bounce_1s_infinite_0ms]" />
-                                      <span className="w-0.5 bg-white rounded-full animate-[bounce_1s_infinite_200ms]" />
-                                      <span className="w-0.5 bg-white rounded-full animate-[bounce_1s_infinite_400ms]" />
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex flex-col truncate">
-                                <span
-                                  className={`text-sm md:text-[15px] font-black truncate ${
-                                    isPlayingThis
-                                      ? 'text-indigo-600 dark:text-indigo-400'
-                                      : 'text-slate-800 dark:text-slate-200'
-                                  }`}
-                                >
-                                  {song.title}
-                                </span>
-                                <span className="text-[10px] md:text-[11px] font-medium text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                                  {song.artist}
-                                </span>
-                              </div>
+                            {/* 封面缩略图 */}
+                            <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-lg md:rounded-xl overflow-hidden shadow-sm bg-slate-200 dark:bg-slate-700">
+                              <img
+                                src={song.cover}
+                                alt="cover"
+                                className="w-full h-full object-cover"
+                              />
                             </div>
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className={`text-sm md:text-[15px] font-medium truncate ${
+                                  isPlayingThis
+                                    ? 'text-indigo-600 dark:text-indigo-400'
+                                    : 'text-slate-800 dark:text-slate-200'
+                                }`}
+                              >
+                                {song.title}
+                              </p>
+                              <p className="text-[10px] md:text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                                {song.artist}
+                              </p>
+                            </div>
+                            {isPlayingThis && isPlaying && (
+                              <div className="flex items-end gap-[2px] h-3 md:h-4">
+                                <span className="w-0.5 bg-indigo-500 rounded-full animate-[bounce_1s_infinite_0ms]" style={{ height: '60%' }} />
+                                <span className="w-0.5 bg-indigo-500 rounded-full animate-[bounce_1s_infinite_200ms]" style={{ height: '100%' }} />
+                                <span className="w-0.5 bg-indigo-500 rounded-full animate-[bounce_1s_infinite_400ms]" style={{ height: '40%' }} />
+                              </div>
+                            )}
                           </motion.div>
                         );
                       })}
@@ -522,43 +512,23 @@ export default function MusicClient() {
           </div>
         </div>
 
-        {/* 评论区 */}
-        <div className="mt-8 md:mt-12 mb-20 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[32px] md:rounded-[40px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
-          <div className="px-5 sm:px-8 md:px-16 py-8 md:py-12 relative">
-            <div className="flex items-center gap-3 mb-6 md:mb-8 border-b border-slate-300/50 dark:border-slate-700 pb-4 md:pb-6">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-indigo-500/10 flex items-center justify-center">
-                <MessageSquare className="text-indigo-500 w-5 h-5 md:w-6 md:h-6" />
-              </div>
-              <div>
-                <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                  留言板
-                </h3>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-medium">
-                  喵喵喵~
-                </p>
-              </div>
-            </div>
-            <div className="relative">
-              <Comments />
-            </div>
+        {/* ==============================================================
+            播放信息（歌曲信息卡片底部）
+        ============================================================== */}
+        <div className="mt-6 md:mt-8 p-4 md:p-6 bg-white/20 dark:bg-slate-800/20 backdrop-blur-sm rounded-2xl border border-white/20 dark:border-white/5">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs md:text-sm text-slate-600 dark:text-slate-400">
+            <span className="font-medium text-slate-800 dark:text-slate-200">播放信息</span>
+            <span>演唱 : {currentSong.artist}</span>
+            <span>作曲 : {currentSong.artist}</span>
+            <span>编曲 : {currentSong.artist}</span>
           </div>
         </div>
       </div>
 
-      {/* 全局样式 */}
+      {/* ================================================================
+          全局样式
+      ================================================================ */}
       <style jsx global>{`
-        @keyframes spin {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        .rotating-disc {
-          animation: spin 20s linear infinite;
-        }
-
         .no-scrollbar::-webkit-scrollbar {
           display: none;
         }
@@ -582,6 +552,14 @@ export default function MusicClient() {
             black 85%,
             transparent 100%
           );
+        }
+
+        @keyframes bounce {
+          0%, 100% { transform: scaleY(0.3); }
+          50% { transform: scaleY(1); }
+        }
+        .animate-bounce {
+          animation: bounce 1s ease-in-out infinite;
         }
       `}</style>
     </div>

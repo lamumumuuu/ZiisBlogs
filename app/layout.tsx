@@ -21,6 +21,9 @@ import Navbar from "../components/Navbar";
 import { MusicProvider } from "../components/music/MusicProvider";
 import { ToastProvider } from "../components/ToastProvider";
 import ClickEffect from "../components/ClickEffect";
+import DanmakuBackground from "../components/DanmakuBackground";
+import FloatingPlayer from "../components/music/FloatingPlayer";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,7 +53,13 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col relative bg-slate-50 dark:bg-slate-950 transition-colors duration-1000">
 
         {/* 第1层：图片轮播（最底层） */}
-        <BackgroundSlider />  {/* 保持不变 */}
+        <BackgroundSlider />
+
+        {/* ========== 弹幕背景层 ========== */}
+        {/* 在桌面端显示，手机端隐藏*/}
+        <div className="hidden md:block">
+          <DanmakuBackground />
+        </div>
 
         {/* 第2层：半透明白色遮罩 */}
         {/* 改 backdrop-blur-sm → backdrop-blur-md */}
@@ -87,6 +96,8 @@ export default function RootLayout({
                 {children}
               </main>
             </div>
+            {/* 音乐框 */}
+            <FloatingPlayer />
           </ToastProvider>
         </MusicProvider>
 

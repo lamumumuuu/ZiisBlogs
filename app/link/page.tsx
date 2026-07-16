@@ -1,24 +1,23 @@
+// app/link/page.tsx
 // =====================================================================
-// 文件位置：app/music/page.tsx
-// 文件类型：Next.js 服务端组件（Server Component）
-// 功能描述：音乐页面的服务端入口，负责 SEO 元数据配置，
-//          将客户端组件 MusicClient 渲染到页面。
+// 功能描述：友链页面 - 服务端组件
+//          负责设置页面元数据（SEO），渲染客户端组件
 // =====================================================================
 
-import { siteConfig } from "../../siteConfig";
-import MusicClient from "./MusicClient";
+import { siteConfig } from '../../siteConfig';
+import FriendsClient from '../../components/linkClient';
 
 // =====================================================================
 // 页面元数据（SEO）
 // =====================================================================
 export const metadata = {
-  title: "音乐馆 | " + siteConfig.title,
-  description: "在代码的缝隙中寻找灵魂的共鸣",
+  title: '友链 | ' + siteConfig.title,
+  description: '友情链接 · 工具收藏',
 };
 
 // =====================================================================
 // 页面组件
 // =====================================================================
-export default function MusicPage() {
-  return <MusicClient />;
+export default function FriendsPage() {
+  return <FriendsClient />;
 }
