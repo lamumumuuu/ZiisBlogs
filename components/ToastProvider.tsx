@@ -1,8 +1,4 @@
-// =====================================================================
-// 文件位置注释
-// =====================================================================
-// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
-// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\components\ToastProvider.tsx
+//components\ToastProvider.tsx
 // 文件类型：React Context Provider 组件（客户端组件）
 // 功能描述：全局 Toast 提示组件，通过 React Context 提供
 //          showToast 方法，用于在页面任何位置显示消息提示。

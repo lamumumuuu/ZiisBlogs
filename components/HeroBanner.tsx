@@ -140,9 +140,9 @@ export default function HeroBanner() {
           </div>
           
           {/* 第二行：作者信息（左对齐，与文字对齐） */}
-          <div className="mt-1 text-[10px] font-bold text-indigo-500/70 dark:text-indigo-400/70 tracking-wide">
+        <div className="absolute bottom-1 right-5 text-[10px] font-bold text-indigo-500/70 dark:text-indigo-400/70 tracking-wide">
             {quotes[quoteIndex]?.author || ""}
-          </div>
+        </div>
         </div>
 
       </div>

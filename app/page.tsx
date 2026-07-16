@@ -5,8 +5,8 @@
 
 import HeroBanner from '../components/HeroBanner';
 import ProfileCard from '../components/ProfileCard';
-import CloudPlayer from '../components/CloudPlayer';
-import LyricBar from '../components/LyricBar';
+import CloudPlayer from '../components/music/CloudPlayer';
+import LyricBar from '../components/music/LyricBar';
 
 // =====================================================================
 // Home 组件 - 首页

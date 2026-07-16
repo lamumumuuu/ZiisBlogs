@@ -1,3 +1,4 @@
+// app/layout.tsx
 // =====================================================================
 // 文件位置注释
 // =====================================================================
@@ -15,11 +16,11 @@ import "./globals.css";
 
 import { siteConfig } from "../siteConfig";
 import BackgroundSlider from "../components/BackgroundSlider";
-import BackgroundEffects from "../components/BackgroundEffects";
+import Sakura from "../components/Sakura";
 import Navbar from "../components/Navbar";
-import { MusicProvider } from "../components/MusicProvider";
+import { MusicProvider } from "../components/music/MusicProvider";
 import { ToastProvider } from "../components/ToastProvider";
-
+import ClickEffect from "../components/ClickEffect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,33 +49,37 @@ export default function RootLayout({
     <html lang="zh-CN" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col relative bg-slate-50 dark:bg-slate-950 transition-colors duration-1000">
 
-        {/* ========== 第1层：渐变背景 或 图片轮播 ========== */}
-        {siteConfig.useGradient ? (
-          // ----- 流动渐变 -----
-          <div
-            className="fixed inset-0 -z-10"
-            style={{
-              background: `linear-gradient(-45deg, ${siteConfig.themeColors.join(", ")})`,
-              backgroundSize: "400% 400%",
-              animation: "gradientMove 15s ease infinite",
-            }}
-          />
-        ) : (
-          // ----- 图片轮播 -----
-          <BackgroundSlider />
-        )}
+        {/* ================================================================
+            背景层：图片轮播 + 渐变叠加 + 樱花特效
+            ================================================================ */}
 
-        {/* ========== 第2层：模糊光晕（两个超大彩色圆） ========== */}
+        {/* ========== 第1层：图片轮播（最底层） ========== */}
+        <BackgroundSlider />
+
+        {/* ========== 第2层：动态渐变叠加层 ========== */}
+        <div
+          className="fixed inset-0 -z-10 mix-blend-overlay opacity-60"
+          style={{
+            background: `linear-gradient(-45deg, ${siteConfig.themeColors.join(", ")})`,
+            backgroundSize: "400% 400%",
+            animation: "gradientMove 15s ease infinite",
+          }}
+        />
+
+        {/* ========== 第3层：模糊光晕（两个超大彩色圆） ========== */}
         <div className="fixed inset-0 -z-10 pointer-events-none">
           <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-white/30 dark:bg-indigo-500/20 rounded-full blur-[100px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-400/30 dark:bg-purple-500/20 rounded-full blur-[100px]" />
         </div>
 
-        {/* ========== 第3层：半透明白色遮罩（让文字更清晰） ========== */}
+        {/* ========== 第4层：半透明白色遮罩（让文字更清晰） ========== */}
         <div className="fixed inset-0 -z-10 bg-white/30 dark:bg-slate-900/40 backdrop-blur-sm" />
 
-        {/* ========== 第4层：漂浮粒子特效 ========== */}
-        <BackgroundEffects />
+        {/* ========== 第5层：樱花特效（替换粒子特效） ========== */}
+        <Sakura />
+
+        {/* ========== 点击特效 ========== */}
+        <ClickEffect />
 
         {/* ========== 内容层 ========== */}
         <MusicProvider>
