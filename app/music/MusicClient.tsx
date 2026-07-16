@@ -426,7 +426,7 @@ export default function MusicClient() {
                           <div className="flex flex-col items-center gap-3 md:gap-4">
                             <Disc3 className="animate-spin text-indigo-500/40" size={32} />
                             <p className="text-base md:text-xl font-black text-indigo-500 animate-pulse">
-                              {currentLyric || '正在捕获灵魂旋律...'}
+                              {currentLyric || '正在捕获旋律中...'}
                             </p>
                           </div>
                         </div>
@@ -531,10 +531,10 @@ export default function MusicClient() {
               </div>
               <div>
                 <h3 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                  乐迷留言板
+                  留言板
                 </h3>
                 <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-medium">
-                  听着这首歌，你想到了什么？
+                  喵喵喵~
                 </p>
               </div>
             </div>
