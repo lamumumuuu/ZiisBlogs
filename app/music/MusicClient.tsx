@@ -51,9 +51,8 @@ function AudioVisualizer({ isPlaying }: { isPlaying: boolean }) {
         return (
           <div
             key={i}
-            className={`w-1.5 rounded-full transition-all duration-300 ${
-              isPlaying ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-slate-300 dark:bg-slate-600'
-            }`}
+            className={`w-1.5 rounded-full transition-all duration-300 ${isPlaying ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-slate-300 dark:bg-slate-600'
+              }`}
             style={{
               height: isPlaying ? '24px' : '6px',
               animation: isPlaying ? `wave ${0.6 + i * 0.05}s ease-in-out infinite alternate` : 'none',
@@ -213,17 +212,6 @@ export default function MusicClient() {
     /* eslint-disable @next/next/no-img-element */
     <div className="min-h-screen relative pb-10 flex flex-col">
       {/* ================================================================
-          背景层：使用当前歌曲封面，若隐若现
-      ================================================================ */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div
-          className="absolute inset-[-10%] bg-cover bg-center transition-all duration-1000 blur-[60px] opacity-40 dark:opacity-30 saturate-150"
-          style={{ backgroundImage: `url(${songCover})` }}
-        />
-        <div className="absolute inset-0 bg-white/50 dark:bg-black/50 backdrop-blur-sm" />
-      </div>
-
-      {/* ================================================================
           主容器
       ================================================================ */}
       <div className="w-full max-w-6xl mx-auto mt-16 md:mt-20 px-4 sm:px-6 md:px-10 relative z-10">
@@ -236,9 +224,8 @@ export default function MusicClient() {
           </div>
           <div className="flex items-center gap-2 text-sm md:text-base font-medium text-slate-600 dark:text-slate-300">
             <span
-              className={`inline-block w-2.5 h-2.5 rounded-full ${
-                isPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
-              }`}
+              className={`inline-block w-2.5 h-2.5 rounded-full ${isPlaying ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+                }`}
             />
             <span>{isPlaying ? '播放中' : '已暂停'}</span>
           </div>
@@ -384,11 +371,10 @@ export default function MusicClient() {
                     <button
                       onClick={() => setShowVolumeSlider(!showVolumeSlider)}
                       onDoubleClick={toggleMute}
-                      className={`p-2 rounded-full transition-all ${
-                        showVolumeSlider
+                      className={`p-2 rounded-full transition-all ${showVolumeSlider
                           ? 'bg-indigo-500 text-white shadow-lg'
                           : 'text-slate-500 hover:text-indigo-500'
-                      }`}
+                        }`}
                     >
                       {isMuted || volume === 0 ? (
                         <VolumeX size={18} className="md:w-5 md:h-5" />
@@ -412,21 +398,19 @@ export default function MusicClient() {
               <div className="flex gap-1 bg-white/50 dark:bg-slate-900/50 rounded-full p-0.5 border border-white/30 dark:border-white/10">
                 <button
                   onClick={() => setActiveTab('lyrics')}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                    activeTab === 'lyrics'
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${activeTab === 'lyrics'
                       ? 'bg-indigo-500 text-white shadow-md'
                       : 'text-slate-500 hover:text-indigo-500'
-                  }`}
+                    }`}
                 >
                   歌词
                 </button>
                 <button
                   onClick={() => setActiveTab('playlist')}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                    activeTab === 'playlist'
+                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${activeTab === 'playlist'
                       ? 'bg-indigo-500 text-white shadow-md'
                       : 'text-slate-500 hover:text-indigo-500'
-                  }`}
+                    }`}
                 >
                   歌单
                 </button>
@@ -452,11 +436,10 @@ export default function MusicClient() {
                             <div
                               key={index}
                               ref={isActive ? activeLyricRef : null}
-                              className={`transition-all duration-700 cursor-pointer px-2 rounded-xl ${
-                                isActive
+                              className={`transition-all duration-700 cursor-pointer px-2 rounded-xl ${isActive
                                   ? 'opacity-100 scale-105 py-1 bg-white/10'
                                   : 'opacity-30 hover:opacity-60'
-                              }`}
+                                }`}
                               onClick={() =>
                                 duration > 0 &&
                                 handleSeek({
@@ -467,11 +450,10 @@ export default function MusicClient() {
                               }
                             >
                               <p
-                                className={`font-medium leading-relaxed transition-all duration-700 ${
-                                  isActive
+                                className={`font-medium leading-relaxed transition-all duration-700 ${isActive
                                     ? 'text-base md:text-lg text-indigo-600 dark:text-indigo-400 font-bold'
                                     : 'text-sm md:text-base text-slate-600 dark:text-slate-400'
-                                }`}
+                                  }`}
                               >
                                 {line.text}
                               </p>
@@ -528,11 +510,10 @@ export default function MusicClient() {
                             exit={{ opacity: 0, scale: 0.95 }}
                             key={song.id || index}
                             onClick={() => playSong(index)}
-                            className={`group flex items-center gap-3 p-2 rounded-xl cursor-pointer transition-all ${
-                              isPlayingThis
+                            className={`group flex items-center gap-3 p-2 rounded-xl cursor-pointer transition-all ${isPlayingThis
                                 ? 'bg-indigo-500/20 dark:bg-indigo-500/30 border-l-4 border-indigo-500'
                                 : 'hover:bg-white/30 dark:hover:bg-slate-700/40 border-l-4 border-transparent'
-                            }`}
+                              }`}
                           >
                             <div className="w-10 h-10 shrink-0 rounded-lg overflow-hidden shadow-sm bg-slate-200 dark:bg-slate-700">
                               <img
@@ -543,11 +524,10 @@ export default function MusicClient() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <p
-                                className={`text-sm font-medium truncate ${
-                                  isPlayingThis
+                                className={`text-sm font-medium truncate ${isPlayingThis
                                     ? 'text-indigo-600 dark:text-indigo-400'
                                     : 'text-slate-800 dark:text-slate-200'
-                                }`}
+                                  }`}
                               >
                                 {song.title}
                               </p>
