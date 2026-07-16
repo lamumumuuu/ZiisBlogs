@@ -7,7 +7,7 @@
 "use client";
 
 import { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback } from 'react';
-import { siteConfig } from '../siteConfig';
+import { siteConfig } from '../../siteConfig';
 
 // =====================================================================
 // 类型定义区域
