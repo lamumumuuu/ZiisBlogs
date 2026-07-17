@@ -20,7 +20,7 @@ export const siteConfig = {
     // { name: '归档', href: '/timeline' },
     // { name: '照片墙', href: '/photowall' },
     { name: '音乐', href: '/music' },
-    // { name: '灵境', href: '/tree' },
+    { name: '灵境', href: '/lingjing' },
     // { name: '说说', href: '/moments' },
     // { name: '杂谈', href: '/chatter' },
     { name: '互联', href: '/link' },
