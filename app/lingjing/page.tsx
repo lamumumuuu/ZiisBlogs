@@ -1,5 +1,6 @@
 // app/lingjing/page.tsx
 import { siteConfig } from "../../siteConfig";
+import ThreeBodyParticles from "../../components/ThreeBodyParticles";
 
 export default function LingjingPage() {
   return (
@@ -22,22 +23,26 @@ export default function LingjingPage() {
               ✨ 灵境
             </h1>
             <p className="text-sm md:text-base text-indigo-600 dark:text-indigo-400 font-bold tracking-wider">
-              施工中 🚧
+              三体粒子特效展示
             </p>
           </div>
 
           {/* ===== 分隔线 ===== */}
           <div className="w-full h-px bg-slate-300/50 dark:bg-slate-700 mt-6 mb-6"></div>
 
-          {/* ===== 占位内容 ===== */}
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="text-6xl mb-4">🔮</div>
-            <h2 className="text-2xl font-bold text-slate-700 dark:text-slate-300">页面正在建设中</h2>
-            <p className="mt-2 text-slate-500 dark:text-slate-400">敬请期待更多精彩内容...</p>
+          {/* ===== 三体粒子特效展示 ===== */}
+          <div className="mb-6">
+            <ThreeBodyParticles />
+          </div>
+
+          {/* ===== 说明文字 ===== */}
+          <div className="text-center text-slate-500 dark:text-slate-400 text-sm space-y-1">
+            <p>默认形态：水滴 · 强互作用力宇宙探测器</p>
+            <p>悬停形态：自然选择号 · 恒星级战舰</p>
           </div>
 
           {/* ===== 页脚信息 ===== */}
-          <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
+          <p className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400">
             {siteConfig.footerText || `© ${new Date().getFullYear()} ${siteConfig.author}. 用 ❤️ 和 Next.js 构建`}
           </p>
         </div>
