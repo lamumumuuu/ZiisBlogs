@@ -63,9 +63,10 @@ function FriendCard({ friend }: { friend: Friend }) {
   );
 }
 // =====================================================================
-// 工具卡片子组件（使用 Favicon，加载失败显示 🔧）
+// 工具卡片子组件（显示封面图 + Favicon 降级）
 // =====================================================================
 function ToolCard({ tool }: { tool: Tool }) {
+  const [coverError, setCoverError] = useState(false);
   const [iconError, setIconError] = useState(false);
 
   // 从 URL 提取域名
@@ -85,37 +86,50 @@ function ToolCard({ tool }: { tool: Tool }) {
       href={tool.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-5 border border-white/30 dark:border-white/10 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-white/60 dark:hover:bg-slate-700/50"
+      className="group block bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/30 dark:border-white/10 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
     >
-      <div className="flex items-center gap-4">
-        {/* ===== 网站 Favicon ===== */}
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full flex-shrink-0 bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm border border-slate-200 dark:border-slate-600 overflow-hidden">
-          {!iconError ? (
-            <img
-              src={faviconUrl}
-              alt={tool.name}
-              className="w-6 h-6 md:w-7 md:h-7 object-contain"
-              onError={() => setIconError(true)}
-            />
-          ) : (
-            <span className="text-2xl">🔧</span>
-          )}
+      {/* ===== 封面图 ===== */}
+      {tool.cover && !coverError ? (
+        <div className="w-full h-32 md:h-40 overflow-hidden bg-slate-200 dark:bg-slate-700 relative">
+          <img
+            src={tool.cover}
+            alt={tool.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={() => setCoverError(true)}
+          />
+          {/* 底部渐变遮罩 */}
+          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/30 to-transparent" />
         </div>
+      ) : (
+        // ===== 没有封面图时的降级（显示 Favicon） =====
+        <div className="w-full h-32 md:h-40 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 flex items-center justify-center">
+          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/80 dark:bg-slate-700/80 flex items-center justify-center shadow-sm border border-slate-200 dark:border-slate-600">
+            {!iconError ? (
+              <img
+                src={faviconUrl}
+                alt={tool.name}
+                className="w-7 h-7 md:w-8 md:h-8 object-contain"
+                onError={() => setIconError(true)}
+              />
+            ) : (
+              <span className="text-3xl">{tool.icon || '🔧'}</span>
+            )}
+          </div>
+        </div>
+      )}
 
-        {/* 信息 */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-base md:text-lg font-bold text-slate-800 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-            {tool.name}
-          </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 truncate">
-            {tool.description}
-          </p>
-        </div>
+      {/* ===== 底部信息 ===== */}
+      <div className="p-4">
+        <h3 className="text-base md:text-lg font-bold text-slate-800 dark:text-white truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          {tool.name}
+        </h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 truncate">
+          {tool.description}
+        </p>
       </div>
     </a>
   );
 }
-
 // =====================================================================
 // Framer Motion 动画变体
 // =====================================================================
