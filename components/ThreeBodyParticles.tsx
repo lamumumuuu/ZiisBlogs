@@ -177,7 +177,7 @@ export default function ThreeBodyParticles() {
   // ===================================================================
   // 动画主循环
   // ===================================================================
-  const animate = (canvas: HTMLCanvasElement, ctx: CanvasRendering2DContext) => {
+  const animate = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
     const width = canvas.width;
     const height = canvas.height;
     const particles = particlesRef.current;
