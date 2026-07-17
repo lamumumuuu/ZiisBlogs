@@ -16,23 +16,11 @@ export const friends: Friend[] = [
   {
     id: '1',
     name: 'XingHuiSama',
-    description: '在代码和数字之间穿梭的臭咸鱼',
+    description: '在代码、学术与分子动力学模拟间穿梭的普通人。近期正埋头于 GROMACS 模拟研究与神经网络计算。',
     url: 'https://www.xinghuisama.top/',
-    avatar: 'https://www.xinghuisama.top/avatar.jpg',
+    avatar: 'https://bu.dusays.com/2026/03/24/69c1e38ac1846.jpg',
   },
-  {
-    id: '2',
-    name: '示例友链A',
-    description: '一个有趣的技术博客',
-    url: 'https://example-a.com/',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=a',
-  },
-  {
-    id: '3',
-    name: '示例友链B',
-    description: '分享创意与灵感',
-    url: 'https://example-b.com/',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=b',
-  },
+
+
   // 在这里添加更多友链
 ];

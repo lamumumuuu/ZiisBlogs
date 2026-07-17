@@ -62,11 +62,24 @@ function FriendCard({ friend }: { friend: Friend }) {
     </a>
   );
 }
-
 // =====================================================================
-// 工具卡片子组件（无"在线"状态）
+// 工具卡片子组件（使用 Favicon，加载失败显示 🔧）
 // =====================================================================
 function ToolCard({ tool }: { tool: Tool }) {
+  const [iconError, setIconError] = useState(false);
+
+  // 从 URL 提取域名
+  const getDomain = (url: string) => {
+    try {
+      return new URL(url).hostname;
+    } catch {
+      return url;
+    }
+  };
+
+  const domain = getDomain(tool.url);
+  const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+
   return (
     <a
       href={tool.url}
@@ -75,9 +88,18 @@ function ToolCard({ tool }: { tool: Tool }) {
       className="group block bg-white/40 dark:bg-slate-800/40 backdrop-blur-md rounded-2xl p-5 border border-white/30 dark:border-white/10 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:bg-white/60 dark:hover:bg-slate-700/50"
     >
       <div className="flex items-center gap-4">
-        {/* 图标 */}
-        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-2xl shadow-inner">
-          {tool.icon || '🔧'}
+        {/* ===== 网站 Favicon ===== */}
+        <div className="w-12 h-12 md:w-14 md:h-14 rounded-full flex-shrink-0 bg-white dark:bg-slate-700 flex items-center justify-center shadow-sm border border-slate-200 dark:border-slate-600 overflow-hidden">
+          {!iconError ? (
+            <img
+              src={faviconUrl}
+              alt={tool.name}
+              className="w-6 h-6 md:w-7 md:h-7 object-contain"
+              onError={() => setIconError(true)}
+            />
+          ) : (
+            <span className="text-2xl">🔧</span>
+          )}
         </div>
 
         {/* 信息 */}
