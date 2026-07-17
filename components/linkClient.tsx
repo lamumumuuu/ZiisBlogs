@@ -8,6 +8,7 @@
 "use client";
 
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { friends, Friend } from '../data/friends';
 import { tools, Tool } from '../data/tools';
 import Image from 'next/image';
@@ -94,96 +95,154 @@ function ToolCard({ tool }: { tool: Tool }) {
 }
 
 // =====================================================================
+// Framer Motion 动画变体
+// =====================================================================
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.9 },
+  show: { opacity: 1, y: 0, scale: 1 }
+};
+
+// =====================================================================
 // FriendsClient 组件
 // =====================================================================
 export default function FriendsClient() {
   const [activeTab, setActiveTab] = useState<'friends' | 'tools'>('friends');
 
-  const isFriendsTab = activeTab === 'friends';
+  // =================================================================
+  // 切换动画处理
+  // =================================================================
+  const handleTabChange = (tab: 'friends' | 'tools') => {
+    if (tab !== activeTab) {
+      setActiveTab(tab);
+    }
+  };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
+    <div className="mx-auto max-w-6xl px-4 py-12 md:py-16 relative z-10">
       
-      {/* ===== 主卡片容器 ===== */}
-      <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[40px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
-        
-        {/* ===== 顶部装饰 ===== */}
-        <div className="w-full h-32 md:h-40 bg-gradient-to-br from-indigo-400/30 via-purple-400/20 to-pink-400/30 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
-          <div className="absolute top-4 left-10 w-20 h-20 bg-white/20 rounded-full blur-xl" />
-          <div className="absolute bottom-4 right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl" />
-          
-          {/* ===== 标题 + 页面描述 ===== */}
-          <div className="absolute bottom-4 left-6 md:left-10">
-            <h1 className="text-2xl md:text-4xl font-black text-white drop-shadow-lg">
+      {/* ===== 顶部标题区域 ===== */}
+      <div className="mb-8 md:mb-12">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          {/* 标题与副标题 */}
+          <div>
+            <h1 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-2 md:mb-4 tracking-widest drop-shadow-sm uppercase">
               云端引力
             </h1>
-            <p className="text-sm md:text-base text-white/80 font-medium mt-1 drop-shadow-md">
+            <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-serif">
               那些散落在赛博宇宙各处的有趣灵魂与神经节点。
             </p>
           </div>
-        </div>
 
-        {/* ===== 内容区域 ===== */}
-        <div className="px-5 sm:px-8 md:px-12 pb-10 relative">
-
-          {/* ===== 左上角切换按钮 ===== */}
-          <div className="flex items-center gap-1 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md rounded-full p-1 border border-white/30 dark:border-white/10 shadow-sm mt-6 mb-6">
-            <button
-              onClick={() => setActiveTab('friends')}
-              className={`px-4 py-1.5 md:px-6 md:py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 ${
+          {/* ===== 右侧透明切换按钮 ===== */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              onClick={() => handleTabChange('friends')}
+              className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 ${
                 activeTab === 'friends'
                   ? 'bg-indigo-500 text-white shadow-md'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/30'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400'
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               友链
-            </button>
-            <button
-              onClick={() => setActiveTab('tools')}
-              className={`px-4 py-1.5 md:px-6 md:py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 ${
+            </motion.button>
+            <motion.button
+              onClick={() => handleTabChange('tools')}
+              className={`px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 ${
                 activeTab === 'tools'
                   ? 'bg-indigo-500 text-white shadow-md'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/30'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400'
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               工具
-            </button>
+            </motion.button>
           </div>
-
-          {/* ===== 卡片网格 ===== */}
-          {isFriendsTab ? (
-            // ----- 友链视图：移动端1列，桌面端3列 -----
-            friends.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {friends.map((friend) => (
-                  <FriendCard key={friend.id} friend={friend} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-slate-500 dark:text-slate-400">
-                <p className="text-lg font-medium">暂无友链</p>
-                <p className="text-sm mt-1">在 data/friends.ts 中添加友链数据</p>
-              </div>
-            )
-          ) : (
-            // ----- 工具视图：移动端1列，桌面端3列 -----
-            tools.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                {tools.map((tool) => (
-                  <ToolCard key={tool.id} tool={tool} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 text-slate-500 dark:text-slate-400">
-                <p className="text-lg font-medium">暂无工具收藏</p>
-                <p className="text-sm mt-1">在 data/tools.ts 中添加工具链接</p>
-              </div>
-            )
-          )}
-
         </div>
       </div>
+
+      {/* ===== 卡片网格区域（带动画切换） ===== */}
+      <AnimatePresence>
+        <motion.div
+          key={activeTab}
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          exit={{ opacity: 0, y: 20 }}
+          className="w-full"
+        >
+          {activeTab === 'friends' ? (
+            // ----- 友链视图：移动端2列，桌面端3列 -----
+            friends.length > 0 ? (
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                {friends.map((friend, index) => (
+                  <motion.div
+                    key={friend.id}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="show"
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 24, delay: index * 0.1 }}
+                  >
+                    <FriendCard friend={friend} />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <motion.div
+                key="empty-friends"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-12 text-slate-500 dark:text-slate-400"
+              >
+                <p className="text-lg font-medium">暂无友链</p>
+                <p className="text-sm mt-1">在 data/friends.ts 中添加友链数据</p>
+              </motion.div>
+            )
+          ) : (
+            // ----- 工具视图：移动端2列，桌面端3列 -----
+            tools.length > 0 ? (
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                {tools.map((tool, index) => (
+                  <motion.div
+                    key={tool.id}
+                    variants={itemVariants}
+                    initial="hidden"
+                    animate="show"
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 24, delay: index * 0.1 }}
+                  >
+                    <ToolCard tool={tool} />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <motion.div
+                key="empty-tools"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-12 text-slate-500 dark:text-slate-400"
+              >
+                <p className="text-lg font-medium">暂无工具收藏</p>
+                <p className="text-sm mt-1">在 data/tools.ts 中添加工具链接</p>
+              </motion.div>
+            )
+          )}
+        </motion.div>
+      </AnimatePresence>
+
     </div>
   );
 }
