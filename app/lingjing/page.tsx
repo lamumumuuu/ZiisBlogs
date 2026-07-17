@@ -1,12 +1,12 @@
 // app/lingjing/page.tsx
 import { siteConfig } from "../../siteConfig";
-import ThreeBodyParticles from "../../components/ThreeBodyParticles";
+import ThreeBodyParticlesThree from "../../components/ThreeBodyParticlesThree";
 
 export default function LingjingPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:py-16">
       <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[40px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
-        
+
         {/* ===== 顶部装饰区域 ===== */}
         <div className="w-full h-32 md:h-40 bg-gradient-to-br from-indigo-400/30 via-purple-400/20 to-pink-400/30 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent"></div>
@@ -16,14 +16,14 @@ export default function LingjingPage() {
 
         {/* ===== 内容区域 ===== */}
         <div className="px-5 sm:px-8 md:px-12 pb-8 relative">
-          
+
           {/* ===== 标题 ===== */}
           <div className="mt-4 text-center">
             <h1 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
               ✨ 灵境
             </h1>
             <p className="text-sm md:text-base text-indigo-600 dark:text-indigo-400 font-bold tracking-wider">
-              三体粒子特效展示
+              三体 · 水滴 / 自然选择号
             </p>
           </div>
 
@@ -32,13 +32,14 @@ export default function LingjingPage() {
 
           {/* ===== 三体粒子特效展示 ===== */}
           <div className="mb-6">
-            <ThreeBodyParticles />
+            <ThreeBodyParticlesThree />
           </div>
 
           {/* ===== 说明文字 ===== */}
           <div className="text-center text-slate-500 dark:text-slate-400 text-sm space-y-1">
-            <p>默认形态：水滴 · 强互作用力宇宙探测器</p>
-            <p>悬停形态：自然选择号 · 恒星级战舰</p>
+            <p>默认形态：💧 强互作用力宇宙探测器 · 水滴</p>
+            <p>悬停形态：🚀 恒星级战舰 · 自然选择号</p>
+            <p className="text-xs opacity-60">2000 个粒子 · Three.js 实时渲染</p>
           </div>
 
           {/* ===== 页脚信息 ===== */}

@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/three": "^0.185.1",
     "framer-motion": "^12.42.2",
     "gitalk": "^1.8.0",
     "gray-matter": "^4.0.3",
@@ -23,6 +24,7 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-rehype": "^11.1.2",
+    "three": "^0.185.1",
     "unified": "^11.0.5"
   },
   "devDependencies": {

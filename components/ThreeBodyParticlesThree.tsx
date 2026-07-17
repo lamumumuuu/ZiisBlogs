@@ -3,14 +3,13 @@
 // 功能描述：三体水滴/自然选择号 3D 粒子特效（Three.js 实现）
 //          默认形态：水滴（强互作用力探测器）
 //          悬停形态：自然选择号（恒星级战舰）
-//          粒子数量：1500，形态平滑插值，带发光和星空背景
+//          粒子数量：2000，形态平滑插值，带发光和星空背景
 // =====================================================================
 
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // =====================================================================
 // 生成水滴形态粒子位置
@@ -19,7 +18,6 @@ function generateWaterDrop(count: number): Float32Array {
   const positions = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
     const u = Math.random();
-    const v = Math.random();
     const theta = Math.random() * Math.PI * 2;
 
     // 泪珠形：上圆下尖
@@ -111,14 +109,6 @@ export default function ThreeBodyParticlesThree() {
     renderer.setClearColor(0x050a1a, 1);
     container.appendChild(renderer.domElement);
 
-    // ===== 轨道控制（可选，取消注释可启用） =====
-    // const controls = new OrbitControls(camera, renderer.domElement);
-    // controls.enableDamping = true;
-    // controls.dampingFactor = 0.05;
-    // controls.autoRotate = false;
-    // controls.enableZoom = true;
-    // controls.target.set(0, 0, 0);
-
     // ===== 粒子数量 =====
     const particleCount = 2000;
 
@@ -128,7 +118,6 @@ export default function ThreeBodyParticlesThree() {
 
     // ===== 当前粒子位置（实时插值） =====
     const currentPositions = new Float32Array(particleCount * 3);
-    // 初始为水滴形态
     currentPositions.set(waterDropPos);
 
     // ===== 粒子几何体 =====
@@ -139,7 +128,6 @@ export default function ThreeBodyParticlesThree() {
     const colors = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
       const t = i / particleCount;
-      // 青色 -> 蓝紫渐变
       const hue = 0.55 + 0.2 * t;
       const color = new THREE.Color().setHSL(hue, 0.9, 0.5 + 0.3 * (1 - t));
       colors[i * 3] = color.r;
@@ -211,17 +199,15 @@ export default function ThreeBodyParticlesThree() {
     }
 
     // ===== 交互状态 =====
-    let targetProgress = 0; // 0=水滴, 1=星舰
+    let targetProgress = 0;
     let currentProgress = 0;
-
-    // ===== 动画循环 =====
     let clock = new THREE.Clock();
 
+    // ===== 动画循环 =====
     const animate = () => {
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
 
-      // 平滑插值进度
       const speed = 2.0;
       if (isHovering) {
         targetProgress = 1;
@@ -254,7 +240,6 @@ export default function ThreeBodyParticlesThree() {
       glowSphere.position.x = Math.sin(elapsed * 0.1) * 0.02;
       glowSphere.position.y = Math.sin(elapsed * 0.08 + 1) * 0.02;
 
-      // controls.update();
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     };
@@ -287,7 +272,9 @@ export default function ThreeBodyParticlesThree() {
       renderer.dispose();
       geometry.dispose();
       material.dispose();
-      container.removeChild(renderer.domElement);
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
     };
   }, [mounted, isHovering]);
 
@@ -316,7 +303,7 @@ export default function ThreeBodyParticlesThree() {
         {isHovering ? '⚡ 自然选择号' : '💧 水滴'}
       </div>
 
-      {/* 加载状态（避免闪烁） */}
+      {/* 加载状态 */}
       {!mounted && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-950/80 z-20">
           <span className="text-cyan-400/60">加载中...</span>
