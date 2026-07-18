@@ -11,7 +11,7 @@ export const siteConfig = {
   navLogo: "Ziis",
   navTitle: "Ziis",
   navSuffix: "の",
-  navAfter: "领域",
+  navAfter: "空间",
 
   // ==================== 导航菜单 ====================
   navItems: [

@@ -25,9 +25,6 @@ export default function LingjingPage() {
         <p className="mt-3 text-sm md:text-base text-white/60 font-medium tracking-wider">
           三体 · 强互作用力宇宙探测器
         </p>
-        <p className="mt-6 text-xs text-white/30 font-mono tracking-widest">
-         拖拽旋转 · 滚轮缩放
-        </p>
         
         {/* 底部信息 */}
         <p className="absolute bottom-6 text-xs text-white/20 font-mono tracking-widest">
