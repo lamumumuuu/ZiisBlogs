@@ -52,35 +52,41 @@ export default function SakanaWidgetComponent() {
     setCurrentChar(nextChar);
   };
 
-  const getCharacterName = (char: Character): string => {
-    switch (char) {
-      case 'chisato': return '千束';
-      case 'takina': return '泷奈';
-      case 'my-char': return '自定义';
-      default: return char;
-    }
-  };
-
   return (
     <>
+      {/* 看板娘 - 紧贴底部，没有任何间距 */}
       <div
         ref={containerRef}
-        className="fixed bottom-4 left-4 z-50"
+        className="fixed bottom-0 left-4 z-50"
         style={{ width: 180, height: 230 }}
       />
 
-      {/* ✅ 透明线条风格按钮 */}
+      {/* 切换按钮 - 位于看板娘正上方 */}
       <button
         onClick={switchCharacter}
-        className="fixed bottom-36 left-4 z-50 px-3 py-1.5 text-xs font-bold rounded-full 
+        className="fixed left-4 z-50 p-2 rounded-full 
           bg-transparent 
-          border border-white/30 
-          text-white/70 
-          hover:border-indigo-400 hover:text-indigo-300 
+          border border-white/25 
+          text-white/50 
+          hover:border-white/60 hover:text-white/80 
           backdrop-blur-sm 
-          transition-all duration-300 hover:scale-105"
+          transition-all duration-300 hover:scale-110"
+        style={{ bottom: '230px' }}
+        aria-label="切换角色"
       >
-        🔄 {getCharacterName(currentChar)}
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="1.5" 
+          strokeLinecap="round" 
+          strokeLinejoin="round"
+        >
+          <path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9"/>
+        </svg>
       </button>
     </>
   );
