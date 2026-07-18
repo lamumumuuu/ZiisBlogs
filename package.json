@@ -24,6 +24,7 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "remark-rehype": "^11.1.2",
+    "sakana-widget": "^3.0.1",
     "three": "^0.185.1",
     "unified": "^11.0.5"
   },

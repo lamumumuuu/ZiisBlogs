@@ -23,6 +23,8 @@ import { ToastProvider } from "../components/ToastProvider";
 import ClickEffect from "../components/ClickEffect";
 import DanmakuBackground from "../components/DanmakuBackground";
 import FloatingPlayer from "../components/music/FloatingPlayer";
+import SakanaWidget from '../components/SakanaWidget';
+
 
 
 const geistSans = Geist({
@@ -109,7 +111,7 @@ export default function RootLayout({
             100% { background-position: 0% 50%; }
           }
         `}</style>
-
+        <SakanaWidget />
       </body>
     </html>
   );
