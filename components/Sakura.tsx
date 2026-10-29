@@ -8,7 +8,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // =====================================================================
 // 花瓣类型定义
@@ -21,21 +21,33 @@ interface Petal {
   delay: number;     // 动画延迟 (-15秒 到 0秒，错开起始位置)
 }
 
+/**
+ * 生成随机花瓣布局。
+ * 只能在客户端挂载后调用：SSR 与客户端各自调用 Random 会得到不同坐标/动画参数，
+ * 从而触发 hydration mismatch。
+ */
+function createPetals(): Petal[] {
+  return Array.from({ length: 40 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    size: 8 + Math.random() * 12, // 8px 到 20px
+    duration: 6 + Math.random() * 8, // 6s 到 14s
+    delay: Math.random() * -15, // -15s 到 0s
+  }));
+}
+
 // =====================================================================
 // Sakura 组件 - 樱花飘落特效
 // =====================================================================
 export default function Sakura() {
-  // ✅ 使用惰性初始化，在组件首次渲染时直接生成花瓣数据
-  // 完全避免 useEffect 中的 setState 警告
-  const [petals] = useState<Petal[]>(() =>
-    Array.from({ length: 40 }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      size: 8 + Math.random() * 12, // 8px 到 20px
-      duration: 6 + Math.random() * 8, // 6s 到 14s
-      delay: Math.random() * -15, // -15s 到 0s
-    }))
-  );
+  // 初始为空：SSR 与客户端首屏一致，随机花瓣只在挂载后生成
+  const [petals, setPetals] = useState<Petal[]>([]);
+
+  useEffect(() => {
+    // 装饰性随机布局必须等挂载后再生成；仅执行一次，关闭该性能建议规则
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPetals(createPetals());
+  }, []);
 
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none z-10 overflow-hidden">

@@ -40,8 +40,14 @@ const quotes = [
 //   - 保持毛玻璃风格，与整体 UI 统一
 // =====================================================================
 export default function HeroBanner() {
-  // 当前显示的句子索引（使用惰性初始化，避免在 effect 中调用 setState）
-  const [quoteIndex] = useState(() => Math.floor(Math.random() * quotes.length));
+  // 首屏固定第 0 句，保证 SSR 与客户端 hydration 文本一致；
+  // 挂载后再随机切换，保留"每次刷新换一句"的效果。
+  const [quoteIndex, setQuoteIndex] = useState(0);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setQuoteIndex(Math.floor(Math.random() * quotes.length));
+  }, []);
 
   // 打字机效果的文本
   const [displayText, setDisplayText] = useState("");

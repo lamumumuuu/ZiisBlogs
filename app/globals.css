@@ -21,3 +21,23 @@ body {
   color: var(--foreground);
 }
 
+/* ========================================
+   全局隐藏滚动条
+   ======================================== */
+
+/* 针对 Chrome, Safari, Edge 等 WebKit 内核浏览器 */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
+/* 针对 Firefox 浏览器 */
+html {
+  scrollbar-width: none;
+}
+
+/* 针对 IE 和旧版 Edge 浏览器 */
+body {
+  -ms-overflow-style: none;
+}

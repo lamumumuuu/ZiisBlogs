@@ -2,11 +2,11 @@
 export const siteConfig = {
   // ==================== 基础信息 ====================
   title: "Ziis",
-  description: "这是我用 Next.js 搭建的个人小站，施工中...",
+  description: "这是我用 Next.js 搭建的 Ziis 个人空间，记录开发，代码与技术成长",
   author: "Ziis",
   authorName: "Ziis",
   avatarUrl: "/avatar.jpg",
-  bio: "一个在代码和数字之间穿梭的臭咸鱼。近期正埋头于Web 项目的基础学习，喜欢折腾各种有趣的技术，偶尔记录下自己的成长。",
+  bio: "一个在代码和数字之间穿梭的臭咸鱼。正在给开发的BUG修修补补，喜欢折腾感兴趣的技术，偶尔记录下自己的成长。",
   faviconUrl: "/favicon.ico",
   navLogo: "Ziis",
   navTitle: "Ziis",
@@ -16,12 +16,12 @@ export const siteConfig = {
   // ==================== 导航菜单 ====================
   navItems: [
     { name: '首页', href: '/' },
-    // { name: '项目', href: '/projects' },
+    { name: '项目', href: '/projects' },
     // { name: '归档', href: '/timeline' },
     // { name: '照片墙', href: '/photowall' },
     { name: '音乐', href: '/music' },
     { name: '灵境', href: '/lingjing' },
-    // { name: '说说', href: '/moments' },
+    { name: '说说', href: '/moments' },
     // { name: '杂谈', href: '/chatter' },
     { name: '互联', href: '/link' },
     { name: '关于', href: '/about' },

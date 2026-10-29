@@ -1,16 +1,4 @@
 // app/music/MusicClient.tsx
-// =====================================================================
-// 修改内容：
-// 1. 标题上移（mt-16 md:mt-20）
-// 2. 右上角添加播放状态指示器（灰点/绿点 + 已暂停/播放中）
-// 3. 左右卡片比例调整为 8:4（1:2）
-// 4. 左侧卡片背景使用封面图片（模糊透明）
-// 5. 左侧卡片左上角显示播放模式，右上角显示 第X首/共Y首
-// 6. 封面居中放大，下方歌名，再下方作者，再下方音频波浪
-// 7. 删除底部播放信息区块
-// 8. 右侧卡片左上角显示"播放信息"，右上角为歌词/歌单切换按钮
-// =====================================================================
-
 "use client";
 
 import { useEffect, useRef, useMemo, useState } from 'react';
@@ -31,17 +19,11 @@ import {
 } from 'lucide-react';
 import { useMusic } from '../../components/music/MusicProvider';
 
-// =====================================================================
-// 类型定义
-// =====================================================================
 interface LyricLine {
   time: number;
   text: string;
 }
 
-// =====================================================================
-// 音频可视化组件（纯 CSS 动画，无 impure 调用）
-// =====================================================================
 function AudioVisualizer({ isPlaying }: { isPlaying: boolean }) {
   const bars = 12;
   return (
@@ -51,12 +33,10 @@ function AudioVisualizer({ isPlaying }: { isPlaying: boolean }) {
         return (
           <div
             key={i}
-            className={`w-1.5 rounded-full transition-all duration-300 ${isPlaying ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-slate-300 dark:bg-slate-600'
-              }`}
+            className={`w-1.5 rounded-full transition-all duration-300 ${isPlaying ? 'bg-indigo-500 dark:bg-indigo-400' : 'bg-slate-300 dark:bg-slate-600'}`}
             style={{
               height: isPlaying ? '24px' : '6px',
-              animation: isPlaying ? `wave ${0.6 + i * 0.05}s ease-in-out infinite alternate` : 'none',
-              animationDelay: `${delay}s`,
+              animation: isPlaying ? `wave ${0.6 + i * 0.05}s ease-in-out ${delay}s infinite alternate` : 'none',
             }}
           />
         );
@@ -71,9 +51,6 @@ function AudioVisualizer({ isPlaying }: { isPlaying: boolean }) {
   );
 }
 
-// =====================================================================
-// MusicClient 组件
-// =====================================================================
 export default function MusicClient() {
   const {
     playlist,
@@ -97,18 +74,44 @@ export default function MusicClient() {
     toggleMute,
   } = useMusic();
 
-  // ===================================================================
-  // 组件内部状态
-  // ===================================================================
   const lyricContainerRef = useRef<HTMLDivElement>(null);
   const activeLyricRef = useRef<HTMLDivElement>(null);
+  const volumeControlRef = useRef<HTMLDivElement>(null); // 音量控制区引用
   const [activeTab, setActiveTab] = useState<'lyrics' | 'playlist'>('lyrics');
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // ===================================================================
-  // 歌词数据
-  // ===================================================================
+  // 原生事件监听：鼠标悬停调节音量并阻止页面滚动
+  useEffect(() => {
+    const el = volumeControlRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!setVolume) return;
+
+      const step = 0.05;
+      const currentVol = isMuted ? 0 : (volume || 0);
+      const newVol = e.deltaY < 0 
+        ? Math.min(1, currentVol + step) 
+        : Math.max(0, currentVol - step);
+
+      setVolume(newVol);
+
+      if (isMuted && newVol > 0) {
+        toggleMute();
+      }
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener('wheel', handleWheel);
+    };
+  }, [volume, isMuted, setVolume, toggleMute]);
+
   const parsedLyrics = useMemo((): LyricLine[] => {
     if (!currentSong) return [];
     if (Array.isArray(currentSong.lyrics) && currentSong.lyrics.length > 0) {
@@ -117,9 +120,6 @@ export default function MusicClient() {
     return [];
   }, [currentSong]);
 
-  // ===================================================================
-  // 计算当前播放进度对应的歌词索引
-  // ===================================================================
   const activeLyricIndex = useMemo(() => {
     if (!parsedLyrics.length) return -1;
     let idx = parsedLyrics.findIndex((l) => l.time > currentTime) - 1;
@@ -127,9 +127,6 @@ export default function MusicClient() {
     return Math.max(0, idx);
   }, [currentTime, parsedLyrics]);
 
-  // ===================================================================
-  // 歌词自动滚动到当前播放行
-  // ===================================================================
   useEffect(() => {
     if (
       activeLyricRef.current &&
@@ -144,9 +141,6 @@ export default function MusicClient() {
     }
   }, [activeLyricIndex, activeTab]);
 
-  // ===================================================================
-  // 工具函数：时间格式化
-  // ===================================================================
   const formatTime = (time: number) => {
     if (!time || isNaN(time)) return '0:00';
     const mins = Math.floor(time / 60);
@@ -154,9 +148,6 @@ export default function MusicClient() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // ===================================================================
-  // 播放模式图标和文字
-  // ===================================================================
   const getPlayModeLabel = () => {
     switch (playMode) {
       case 'loop': return '列表循环';
@@ -165,6 +156,7 @@ export default function MusicClient() {
       default: return '列表循环';
     }
   };
+  
   const getPlayModeIcon = () => {
     switch (playMode) {
       case 'loop': return <Repeat size={16} />;
@@ -174,9 +166,6 @@ export default function MusicClient() {
     }
   };
 
-  // ===================================================================
-  // 歌单搜索过滤
-  // ===================================================================
   const filteredPlaylist = useMemo(() => {
     if (!searchQuery.trim()) return playlist;
     const lowerQuery = searchQuery.toLowerCase();
@@ -187,9 +176,6 @@ export default function MusicClient() {
     });
   }, [playlist, searchQuery]);
 
-  // ===================================================================
-  // 加载状态
-  // ===================================================================
   if (isLoading || !currentSong) {
     return (
       <div className="min-h-screen relative pb-32 flex flex-col">
@@ -205,17 +191,10 @@ export default function MusicClient() {
   const currentIndex = playlist.findIndex(s => s.id === currentSong.id) + 1;
   const totalSongs = playlist.length;
 
-  // ===================================================================
-  // 主渲染
-  // ===================================================================
   return (
     /* eslint-disable @next/next/no-img-element */
     <div className="min-h-screen relative pb-10 flex flex-col">
-      {/* ================================================================
-          主容器
-      ================================================================ */}
       <div className="w-full max-w-6xl mx-auto mt-16 md:mt-20 px-4 sm:px-6 md:px-10 relative z-10">
-        {/* 标题区 + 状态指示器 */}
         <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-6 md:mb-10">
           <div>
             <p className="mb-2 text-sm font-bold text-indigo-600 dark:text-indigo-300">音乐</p>
@@ -227,26 +206,15 @@ export default function MusicClient() {
           </div>
         </header>
 
-        {/* ==============================================================
-            主布局：左侧播放器 + 右侧面板（360px）
-        ============================================================== */}
         <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
-
-          {/* ============================================================
-              左侧：播放器
-          ============================================================ */}
           <article className="relative isolate min-h-[640px] overflow-hidden rounded-3xl border border-white/40 bg-white/45 shadow-xl backdrop-blur-xl transition-colors duration-700 dark:border-white/10 dark:bg-slate-800/50">
-            {/* 背景：低透明度封面 + 渐变遮罩 */}
             <div
               className="absolute inset-0 bg-cover bg-center opacity-20 saturate-125 dark:opacity-15"
               style={{ backgroundImage: `url(${songCover})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/50 to-indigo-100/30 dark:from-slate-900/85 dark:via-slate-900/75 dark:to-indigo-950/45" />
 
-            {/* 内容（z-10） */}
             <div className="relative z-10 flex h-full min-h-[640px] flex-col justify-between p-5 sm:p-7 md:p-8">
-
-              {/* 左上角：播放模式，右上角：序号 */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-white/40 dark:bg-slate-800/40 px-3 py-1 rounded-full backdrop-blur-sm">
                   {getPlayModeIcon()}
@@ -257,7 +225,6 @@ export default function MusicClient() {
                 </div>
               </div>
 
-              {/* 封面居中 */}
               <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center py-8">
                 <div className="relative aspect-square w-[min(70vw,340px)]">
                   <motion.div
@@ -270,21 +237,17 @@ export default function MusicClient() {
                   </motion.div>
                 </div>
 
-                {/* 歌名 */}
                 <div className="mt-8 w-full text-center">
                   <h2 className="mx-auto max-w-3xl text-balance text-3xl font-black text-slate-900 dark:text-white sm:text-4xl md:text-5xl">{currentSong.title}</h2>
                   <p className="mt-3 text-sm font-bold text-slate-600 dark:text-slate-300">{currentSong.artist}</p>
                 </div>
 
-                {/* 音频波浪可视化 */}
                 <div className="mt-8 w-full flex justify-center">
                   <AudioVisualizer isPlaying={isPlaying} />
                 </div>
               </div>
 
-              {/* 进度条 + 控制（底部） */}
               <div className="w-full mt-auto relative z-20">
-                {/* 进度条区域 */}
                 <div className="w-full flex flex-col gap-1.5 mb-6 md:mb-8 px-1 md:px-3">
                   <input
                     type="range"
@@ -303,9 +266,7 @@ export default function MusicClient() {
                   </div>
                 </div>
 
-                {/* 控制按钮区域 */}
                 <div className="w-full flex items-center justify-between px-1 md:px-2 lg:px-4">
-                  {/* 播放模式 */}
                   <button
                     onClick={togglePlayMode}
                     className="p-2 transition-transform hover:scale-110"
@@ -314,7 +275,6 @@ export default function MusicClient() {
                     {getPlayModeIcon()}
                   </button>
 
-                  {/* 播放控制 */}
                   <div className="flex items-center gap-3 md:gap-4 lg:gap-6">
                     <button
                       onClick={prevSong}
@@ -340,8 +300,12 @@ export default function MusicClient() {
                     </button>
                   </div>
 
-                  {/* 音量控制 */}
-                  <div className="flex items-center" onMouseLeave={() => setShowVolumeSlider(false)}>
+                  {/* 音量控制区域（应用了 ref 监听原生 wheel 事件） */}
+                  <div 
+                    ref={volumeControlRef}
+                    className="flex items-center" 
+                    onMouseLeave={() => setShowVolumeSlider(false)}
+                  >
                     <AnimatePresence>
                       {showVolumeSlider && (
                         <motion.div
@@ -385,11 +349,7 @@ export default function MusicClient() {
             </div>
           </article>
 
-          {/* ============================================================
-              右侧：歌词 / 歌单 面板
-          ============================================================ */}
           <aside className="flex min-h-[560px] flex-col rounded-3xl border border-white/40 bg-white/45 shadow-xl backdrop-blur-xl transition-colors duration-700 dark:border-white/10 dark:bg-slate-800/50">
-            {/* 面板头部：左上角“播放信息”，右上角切换按钮 */}
             <div className="flex items-center justify-between p-4 md:p-5 pb-0">
               <span className="text-sm font-bold text-slate-800 dark:text-slate-200">播放信息</span>
               <div className="flex gap-1 bg-white/50 dark:bg-slate-900/50 rounded-full p-0.5 border border-white/30 dark:border-white/10">
@@ -415,7 +375,6 @@ export default function MusicClient() {
             </div>
 
             <div className="flex-1 relative mt-2 flex flex-col overflow-hidden px-4 pb-4">
-              {/* ======== 歌词 Tab ======== */}
               {activeTab === 'lyrics' && (
                 <div className="absolute inset-0 flex flex-col h-full animate-in fade-in duration-300 px-4 pt-2 pb-4">
                   <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white/30 dark:from-slate-800/40 to-transparent z-10 pointer-events-none" />
@@ -472,10 +431,8 @@ export default function MusicClient() {
                 </div>
               )}
 
-              {/* ======== 歌单 Tab ======== */}
               {activeTab === 'playlist' && (
                 <div className="absolute inset-0 px-2 pb-4 pt-2 animate-in fade-in duration-300 flex flex-col">
-                  {/* 搜索框 */}
                   <div className="relative w-full max-w-xs mx-auto group mb-3 shrink-0">
                     <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 z-10 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                     <input
@@ -551,9 +508,6 @@ export default function MusicClient() {
         </section>
       </div>
 
-      {/* ================================================================
-          全局样式
-      ================================================================ */}
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar {
           display: none;
@@ -588,7 +542,7 @@ export default function MusicClient() {
           animation: bounce 1s ease-in-out infinite;
         }
       `}</style>
-    </div >
+    </div>
     /* eslint-enable @next/next/no-img-element */
   );
 }
