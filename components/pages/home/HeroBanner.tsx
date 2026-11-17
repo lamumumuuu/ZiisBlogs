@@ -1,4 +1,7 @@
-//components\HeroBanner.tsx
+// 区域：首页
+// 功能：顶部每日一言横幅，替代搜索栏位置
+// 路径：根目录/com/pages/home/此文件
+// =====================================================================
 // 文件类型：React 客户端组件
 // 功能描述：首页顶部的长条形横幅组件，替代搜索栏的视觉位置。
 //          展示站点欢迎语、日期、一句励志/文艺短句，
@@ -8,21 +11,14 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { dailyQuotes } from '../../../data/demo/quotes';
 
 // =====================================================================
-// 每日一言文案库
+// 每日一言文案库：data/demo/quotes.ts
 // =====================================================================
 // 设计：从预设文案中随机选择一条，每次刷新页面显示不同的句子
 // 也可以根据当前日期选择固定的句子
 // =====================================================================
-const quotes = [
-  { text: "代码改变世界，热爱创造奇迹。", author: "— 致每一位开发者" },
-  { text: "保持好奇，持续学习，永远热爱。", author: "— 成长箴言" },
-  { text: "愿你出走半生，归来仍是少年。", author: "— 苏轼" },
-  { text: "能陪我组一辈子的乐团吗？", author: "— 高松灯" },
-  { text: "人又不聪明，还学人家秃顶。", author: "— 胡一菲" },
-  { text: "等我，辉夜！我一定会去月球接你，一起吃松饼。为了让你再也不用回去 —— 我要把月球毁掉！！！！", author: "— 酒寄彩叶" }
-];
 
 // =====================================================================
 // HeroBanner 组件 - 首页顶部长条形横幅
@@ -46,7 +42,7 @@ export default function HeroBanner() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setQuoteIndex(Math.floor(Math.random() * quotes.length));
+    setQuoteIndex(Math.floor(Math.random() * dailyQuotes.length));
   }, []);
 
   // 打字机效果的文本
@@ -71,7 +67,7 @@ export default function HeroBanner() {
   // 因为这是打字机动画必要的状态重置
   // ===================================================================
   useEffect(() => {
-    const targetText = quotes[quoteIndex]?.text || "";
+    const targetText = dailyQuotes[quoteIndex]?.text || "";
     let i = 0;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayText("");
@@ -147,7 +143,7 @@ export default function HeroBanner() {
           
           {/* 第二行：作者信息（左对齐，与文字对齐） */}
         <div className="absolute bottom-1 right-5 text-[10px] font-bold text-indigo-500/70 dark:text-indigo-400/70 tracking-wide">
-            {quotes[quoteIndex]?.author || ""}
+            {dailyQuotes[quoteIndex]?.author || ""}
         </div>
         </div>
 

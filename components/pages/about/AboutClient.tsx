@@ -1,9 +1,11 @@
-// components/AboutClient.tsx
+// 区域：关于页
+// 功能：关于页客户端容器，负责介绍/评论切换与内容渲染
+// 路径：根目录/com/pages/about/此文件
 "use client";
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Comments from './Comments';
-import { siteConfig } from '../siteConfig';
+import { siteConfig } from '../../../siteConfig';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 

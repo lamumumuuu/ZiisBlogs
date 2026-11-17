@@ -1,3 +1,6 @@
+// 区域：关于页
+// 功能：基于 Gitalk 的评论区
+// 路径：根目录/com/pages/about/此文件
 "use client";
 
 import { useEffect, useRef } from 'react';
@@ -6,7 +9,7 @@ import 'gitalk/dist/gitalk.css';
 import Gitalk from 'gitalk';
 import { MessageCircleOff } from 'lucide-react';
 
-import { siteConfig } from '../siteConfig';
+import { siteConfig } from '../../../siteConfig';
 
 // 检查 Gitalk 配置是否有效（排除占位符和空值）
 const isGitalkConfigValid = () => {

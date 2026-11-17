@@ -5,19 +5,19 @@
 // =====================================================================
 
 import { siteConfig } from '../../siteConfig';
-import FriendsClient from '../../components/linkClient';
+import LinkClient from '../../components/pages/link/LinkClient';
 
 // =====================================================================
 // 页面元数据（SEO）
 // =====================================================================
 export const metadata = {
   title: '友链 | ' + siteConfig.title,
-  description: '友情链接 · 工具收藏',
+  description: '友情链接',
 };
 
 // =====================================================================
 // 页面组件
 // =====================================================================
 export default function FriendsPage() {
-  return <FriendsClient />;
+  return <LinkClient />;
 }

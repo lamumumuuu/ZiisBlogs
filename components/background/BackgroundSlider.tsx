@@ -1,4 +1,6 @@
-// components/BackgroundSlider.tsx
+// 区域：背景层
+// 功能：背景图片轮播，自动淡入淡出切换
+// 路径：根目录/com/background/此文件
 // =====================================================================
 // 功能描述：背景图片轮播组件
 //          支持多张图片自动切换，带淡入淡出过渡效果。
@@ -9,7 +11,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { siteConfig } from '../siteConfig';
+import { siteConfig } from '../../siteConfig';
 
 export default function BackgroundSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -6,7 +6,7 @@
 // =====================================================================
 
 import { siteConfig } from "../../siteConfig";
-import MusicClient from "./MusicClient";
+import MusicClient from "../../components/music/MusicClient";
 
 // =====================================================================
 // 页面元数据（SEO）

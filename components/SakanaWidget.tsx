@@ -1,4 +1,6 @@
-// components/SakanaWidget.tsx
+// 区域：全局
+// 功能：右下角 Sakana 悬浮挂件，随页面全局显示
+// 路径：根目录/com/此文件
 "use client";
 
 import { useEffect, useRef } from 'react';

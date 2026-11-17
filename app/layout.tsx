@@ -13,15 +13,18 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+// 全局样式：Markdown 代码高亮与 KaTeX 数学公式（原在 about 页面单独引入）
+import "highlight.js/styles/atom-one-dark.css";
+import "katex/dist/katex.min.css";
 
 import { siteConfig } from "../siteConfig";
-import BackgroundSlider from "../components/BackgroundSlider";
-import Sakura from "../components/Sakura";
+import BackgroundSlider from "../components/background/BackgroundSlider";
+import Sakura from "../components/background/Sakura";
 import Navbar from "../components/Navbar";
 import { MusicProvider } from "../components/music/MusicProvider";
 import { ToastProvider } from "../components/ToastProvider";
-import ClickEffect from "../components/ClickEffect";
-import DanmakuBackground from "../components/DanmakuBackground";
+import ClickEffect from "../components/background/ClickEffect";
+import DanmakuBackground from "../components/background/DanmakuBackground";
 import FloatingPlayer from "../components/music/FloatingPlayer";
 import SakanaWidget from '../components/SakanaWidget';
 

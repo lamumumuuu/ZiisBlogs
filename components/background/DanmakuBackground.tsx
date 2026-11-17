@@ -1,8 +1,7 @@
+// 区域：背景层
+// 功能：桌面端背景弹幕特效，读取 data/demo/danmaku.ts 文案
+// 路径：根目录/com/background/此文件
 // =====================================================================
-// 文件位置注释
-// =====================================================================
-// 主文件夹路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs
-// 当前文件路径：c:\Users\admin\Desktop\新建文件夹\Ziis3.0\ZiisBlogs\components\DanmakuBackground.tsx
 // 文件类型：React 客户端组件
 // 功能描述：背景弹幕特效，在页面顶部区域滚动显示趣味文字。
 //          限制在 30vh 高度内，z-index 为 0（在内容层下方）。
@@ -11,7 +10,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { siteConfig } from '../siteConfig';
+import { danmakuList, fallbackDanmakuTexts } from '../../data/demo/danmaku';
 
 // =====================================================================
 // 弹幕数据结构
@@ -24,21 +23,8 @@ interface DanmakuItem {
   delay: number;    // 动画延迟
 }
 
-// 默认文案：siteConfig.danmakuList 为空时兜底
-const FALLBACK_DANMAKU_TEXTS = [
-  '在干嘛呢？',
-  '有笨蛋嘛？',
-  '前方高能反应！',
-  'Bug 跑起来了吗？',
-  '呜呜呜呜呜',
-  '熬夜修仙中......',
-  'BUG 修复进度 99%',
-  '今天背单词了吗？',
-  'AI大人再让我跑一下吧！QAQ',
-  '写算法中',
-  '睡大觉中',
-  '到底在干嘛？',
-];
+// 弹幕文案：data/demo/danmaku.ts
+// FALLBACK 用于文案列表为空时兜底
 
 /**
  * 生成随机弹幕布局。
@@ -46,8 +32,8 @@ const FALLBACK_DANMAKU_TEXTS = [
  * 否则 SSR 与客户端会得到不同随机值，触发 hydration mismatch。
  */
 function createDanmakus(): DanmakuItem[] {
-  const configured = siteConfig.danmakuList;
-  const texts = configured && configured.length > 0 ? configured : FALLBACK_DANMAKU_TEXTS;
+  const configured = danmakuList;
+  const texts = configured && configured.length > 0 ? configured : fallbackDanmakuTexts;
 
   return Array.from({ length: 15 }, (_, i) => ({
     id: i,

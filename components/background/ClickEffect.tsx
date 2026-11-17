@@ -1,3 +1,6 @@
+// 区域：背景层
+// 功能：鼠标点击水波纹特效
+// 路径：根目录/com/background/此文件
 "use client";
 import { useEffect, useRef } from 'react';
 

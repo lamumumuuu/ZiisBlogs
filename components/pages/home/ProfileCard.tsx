@@ -1,4 +1,7 @@
-//components\ProfileCard.tsx
+// 区域：首页
+// 功能：个人资料卡片，展示头像、昵称、签名与社交入口
+// 路径：根目录/com/pages/home/此文件
+// =====================================================================
 // 功能描述：首页个人资料卡片组件，展示方形头像、昵称、个性签名、
 //          数据统计（文章/项目/照片）和社交媒体图标。
 //          点击卡片跳转到关于页面。
@@ -8,10 +11,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { siteConfig } from '../siteConfig';
-import { useToast } from './ToastProvider';
+import { siteConfig } from '../../../siteConfig';
+import { useToast } from '../../ToastProvider';
 import Image from 'next/image';
-import { stat } from 'fs';
 
 // =====================================================================
 // 类型定义

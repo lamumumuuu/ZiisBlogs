@@ -3,8 +3,8 @@
 //          LyricBar 等组件。
 // =====================================================================
 
-import HeroBanner from '../components/HeroBanner';
-import ProfileCard from '../components/ProfileCard';
+import HeroBanner from '../components/pages/home/HeroBanner';
+import ProfileCard from '../components/pages/home/ProfileCard';
 import CloudPlayer from '../components/music/CloudPlayer';
 import LyricBar from '../components/music/LyricBar';
 

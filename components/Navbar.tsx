@@ -1,4 +1,6 @@
-// components/Navbar.tsx
+// 区域：全局
+// 功能：全站导航栏，含 PC 滚动隐藏与移动端轮盘菜单
+// 路径：根目录/com/此文件
 'use client';
 
 import Link from 'next/link';
@@ -9,7 +11,7 @@ import { siteConfig } from '../siteConfig';
 
 export default function Navbar() {
   const [showNav, setShowNav] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -55,25 +57,32 @@ export default function Navbar() {
     if (isMobileMenuOpen) rawRotation.set(0);
   }, [isMobileMenuOpen, rawRotation]);
 
-  // PC 端导航栏滚动隐藏
+  // PC 端导航栏滚动隐藏：向下滚动立即收起，向上滚动立即展开
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      const delta = currentScrollY - lastScrollYRef.current;
+
+      if (currentScrollY <= 80) {
+        setShowNav(true);
+      } else if (delta > 0) {
         setShowNav(false);
-      } else {
+      } else if (delta < 0) {
         setShowNav(true);
       }
-      setLastScrollY(currentScrollY);
+
+      lastScrollYRef.current = currentScrollY;
     };
+
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return (
     <>
       {/* ========== PC端导航栏 ========== */}
-      <header className={`hidden md:block w-full fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${showNav ? 'translate-y-0' : '-translate-y-full'} bg-white/40 dark:bg-slate-900/50 backdrop-blur-xl border-white/20 dark:border-white/5 shadow-sm`}>
+      <header className={`hidden md:block w-full fixed top-0 left-0 right-0 z-50 transition-all duration-[250ms] border-b ${showNav ? 'translate-y-0' : '-translate-y-full'} bg-white/40 dark:bg-slate-900/50 backdrop-blur-xl border-white/20 dark:border-white/5 shadow-sm`}>
         <div className="w-[90%] max-w-6xl mx-auto h-16 flex items-center justify-between px-4 sm:px-[30px] box-border">
           <Link href="/" className="text-xl font-black text-slate-800 dark:text-white tracking-tighter hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-300">
             {siteConfig.navTitle || siteConfig.authorName || 'My Site'}

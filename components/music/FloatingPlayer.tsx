@@ -1,4 +1,6 @@
-// components/music/FloatingPlayer.tsx
+// 区域：音乐
+// 功能：全局悬浮迷你播放器
+// 路径：根目录/com/music/此文件
 "use client";
 
 import { usePathname } from 'next/navigation';

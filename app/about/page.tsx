@@ -11,17 +11,13 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
 import rehypeStringify from 'rehype-stringify';
 
-// 引入高亮主题
-import 'highlight.js/styles/atom-one-dark.css';
-import 'katex/dist/katex.min.css';
-
-import AboutClient from '../../components/AboutClient';
+import AboutClient from '../../components/pages/about/AboutClient';
 import { siteConfig } from '../../siteConfig';
 import { Suspense } from 'react';
 
 export default async function AboutPage() {
-  const fullPath = path.join(process.cwd(), 'app', 'about', 'about.md');
-  // const fullPath = path.join(process.cwd(), 'app', 'about', '简历.md');
+  // const fullPath = path.join(process.cwd(), 'app', 'about', 'about.md');
+  const fullPath = path.join(process.cwd(), 'app', 'about', '简历.md');
   // 
   let contentHtml = '<p>博主很懒，还没有写自我介绍哦...</p>';
   let coverImage = siteConfig.aboutCoverImage || '/aboutbackground.jpg';

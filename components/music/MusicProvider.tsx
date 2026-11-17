@@ -1,4 +1,7 @@
-//components\MusicProvider.tsx
+// 区域：音乐
+// 功能：全局音乐播放状态 Context，管理播放列表与播放控制
+// 路径：根目录/com/music/此文件
+// =====================================================================
 // 功能描述：全局音乐播放器状态管理，通过 React Context 提供
 //          播放列表、当前歌曲、播放状态、进度控制等功能。
 //          放置在根 layout 中，实现跨页面音乐播放不中断。
@@ -7,7 +10,7 @@
 "use client";
 
 import { createContext, useContext, useState, useRef, useEffect, ReactNode, useCallback } from 'react';
-import { siteConfig } from '../../siteConfig';
+import { cloudMusicIds } from '../../data/demo/music';
 
 // =====================================================================
 // 类型定义区域
@@ -142,7 +145,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [lyrics, setLyrics] = useState<{ time: number; text: string }[]>([]);
   const [currentLyric, setCurrentLyric] = useState("正在连接高可用神经云端...");
   // 根据是否配置音乐 ID 来设置初始加载状态，避免在 effect 中直接设置
-  const [isLoading, setIsLoading] = useState(() => (siteConfig.cloudMusicIds?.length ?? 0) > 0);
+  const [isLoading, setIsLoading] = useState(() => (cloudMusicIds?.length ?? 0) > 0);
   const [volume, setVolumeState] = useState(0.25);
   const [isMuted, setIsMuted] = useState(false);
   const [playMode, setPlayMode] = useState<PlayMode>('loop');
@@ -162,7 +165,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     const fetchMusicData = async () => {
       try {
         // 调用音乐 API 获取歌单详情
-        const res = await fetch(`/api/music?ids=${siteConfig.cloudMusicIds.join(',')}`);
+        const res = await fetch(`/api/music?ids=${cloudMusicIds.join(',')}`);
         const rawResults = await res.json();
 
         // 数据清洗和格式化
@@ -195,7 +198,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     };
 
     // 只有配置了音乐 ID 才请求
-    if (siteConfig.cloudMusicIds?.length > 0) {
+    if (cloudMusicIds?.length > 0) {
       fetchMusicData();
     }
     // 否则保持 isLoading 为 false（已在 useState 初始化时设置）

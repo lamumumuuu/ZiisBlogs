@@ -1,4 +1,7 @@
-//components\ToastProvider.tsx
+// 区域：全局
+// 功能：全局 Toast 消息提示 Provider
+// 路径：根目录/com/此文件
+// =====================================================================
 // 文件类型：React Context Provider 组件（客户端组件）
 // 功能描述：全局 Toast 提示组件，通过 React Context 提供
 //          showToast 方法，用于在页面任何位置显示消息提示。

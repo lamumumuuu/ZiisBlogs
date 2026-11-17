@@ -1,4 +1,6 @@
-// app/music/MusicClient.tsx
+// 区域：音乐页
+// 功能：音乐馆客户端页面，歌词/播放列表切换与播放控制
+// 路径：根目录/com/music/此文件
 "use client";
 
 import { useEffect, useRef, useMemo, useState } from 'react';
@@ -17,7 +19,7 @@ import {
   Search,
   X,
 } from 'lucide-react';
-import { useMusic } from '../../components/music/MusicProvider';
+import { useMusic } from './MusicProvider';
 
 interface LyricLine {
   time: number;
